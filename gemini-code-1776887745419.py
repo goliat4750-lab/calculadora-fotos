@@ -1,68 +1,55 @@
 import streamlit as st
 import urllib.parse
 
-# Configuración visual
-st.set_page_config(page_title="Presupuestador DL Fotografía", page_icon="📷")
-
-st.title("📷 DL Fotografía y Video")
-st.subheader("Calculadora de Presupuestos")
-
-# --- ENTRADAS DEL USUARIO ---
-servicio = st.selectbox(
-    "Seleccione el servicio:",
-    ["Sesión Retrato/Bebé (2hs)", "Evento 15/18 años", "Boda Completa", "Bautismo (Iglesia + Fiesta)", "Evento (Solo Fotos)"]
+# 1. Configuración de la pestaña con tu logo
+st.set_page_config(
+    page_title="Presupuestador DL Fotografía", 
+    page_icon="Sin-título-1.png",
+    layout="centered"
 )
 
-con_drone = st.checkbox("¿Incluir servicio de Drone (4K)?")
+# 2. Tu Logo de DL Fotografía y Video
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.image("Sin-título-1.png", use_container_width=True)
 
+# --- SECCIÓN 1: CALENDARIO (PRIMERO) ---
+st.divider()
+st.subheader("📅 Disponibilidad de Fechas")
+st.write("Consultá si tu fecha está libre antes de cotizar:")
+calendar_url = "https://calendar.google.com/calendar/embed?src=goliat4750%40gmail.com&ctz=America%2FArgentina%2FCordoba"
+st.components.v1.iframe(calendar_url, height=500, scrolling=True)
+
+# --- SECCIÓN 2: CALCULADORA ---
+st.divider()
+st.subheader("📊 Calculadora de Presupuestos")
+
+SERVICIOS = {
+    "Sesión Retrato/Bebé (2hs)": {"base": 40000, "con_drone": 40000, "desc": "50-70 fotos digitales."},
+    "Evento 15/18 años": {"base": 230000, "con_drone": 300000, "desc": "6hs de cobertura, +100 fotos y 1 video."},
+    "Boda Completa": {"base": 300000, "con_drone": 370000, "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."},
+    "Bautismo (Iglesia + Fiesta)": {"base": 230000, "con_drone": 230000, "desc": "+100 fotos y 1 video."},
+    "Evento (Solo Fotos)": {"base": 180000, "con_drone": 180000, "desc": "Cobertura fotográfica profesional."}
+}
+
+servicio_nom = st.selectbox("Seleccione el servicio:", list(SERVICIOS.keys()))
+con_drone = st.checkbox("¿Incluir servicio de Drone (4K)?")
 distancia = st.number_input("KM fuera de Albardón (ida y vuelta):", min_value=0, step=2)
 
-# --- LÓGICA DE PRECIOS ---
-total = 0
-detalles = ""
-
-if servicio == "Sesión Retrato/Bebé (2hs)":
-    total = 40000
-    detalles = "50-70 fotos digitales."
-elif servicio == "Evento 15/18 años":
-    total = 300000 if con_drone else 230000
-    detalles = "6hs de cobertura, +100 fotos y 1 video."
-elif servicio == "Boda Completa":
-    total = 370000 if con_drone else 300000
-    detalles = "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."
-elif servicio == "Bautismo (Iglesia + Fiesta)":
-    total = 230000
-    detalles = "+100 fotos y 1 video."
-elif servicio == "Evento (Solo Fotos)":
-    total = 180000
-    detalles = "Cobertura fotográfica profesional."
-
-# Viáticos ($1000 c/ 2km)
+datos = SERVICIOS[servicio_nom]
+precio_base = datos["con_drone"] if con_drone else datos["base"]
+detalles = datos["desc"]
 viaticos = (distancia / 2) * 1000
-total_final = total + viaticos
+total_final = precio_base + viaticos
 
-# --- MOSTRAR RESULTADO ---
-st.divider()
-st.header(f"Total: ${total_final:,.0f}")
+st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
 st.write(f"**Incluye:** {detalles}")
 
-# --- BOTÓN DE WHATSAPP ---
-# REEMPLAZA LAS X CON TU NÚMERO (Ejemplo: 5492645556677)
+# --- SECCIÓN 3: CONTACTO ---
 mi_numero = "5492645164757" 
-
-texto_mensaje = f"Hola Diego! Coticé un servicio de {servicio}. Total: ${total_final:,.0f}. ¿Tenés disponibilidad?"
+texto_mensaje = f"Hola Diego! Coticé un servicio de {servicio_nom}. El total es ${total_final:,.0f}. ¿Tenés disponibilidad?"
 mensaje_url = urllib.parse.quote(texto_mensaje)
 link_whatsapp = f"https://wa.me/{mi_numero}?text={mensaje_url}"
 
 st.write("---")
-st.write("¿Te interesa este presupuesto?")
-st.link_button("📱 Consultar por WhatsApp", link_whatsapp)
-st.divider()
-st.subheader("📅 Consultá mi disponibilidad")
-st.write("Fijate si tengo la fecha libre antes de consultar.")
-
-# Definimos el link de forma limpia
-calendar_url = "https://calendar.google.com/calendar/embed?src=goliat4750%40gmail.com&ctz=America%2FArgentina%2FCordoba"
-
-# Usamos un formato que Streamlit no confunda
-st.components.v1.iframe(calendar_url, height=600, scrolling=True)
+st.link_button("📱 Consultar disponibilidad por WhatsApp", link_whatsapp, use_container_width=True)
