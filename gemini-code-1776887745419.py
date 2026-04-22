@@ -57,3 +57,14 @@ link_whatsapp = f"https://wa.me/{mi_numero}?text={mensaje_url}"
 st.write("---")
 st.write("¿Te interesa este presupuesto?")
 st.link_button("📱 Consultar por WhatsApp", link_whatsapp)
+st.divider()
+st.subheader("📅 Consultá mi disponibilidad")
+st.write("Fijate si tengo la fecha libre antes de consultar.")
+
+# Usamos tu link dentro del formato que entiende Streamlit
+calendar_html = """
+<iframe src="https://calendar.google.com/calendar/embed?src=goliat4750%40gmail.com&ctz=America%2FArgentina%2FCordoba" 
+style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+"""
+
+st.markdown(calendar_html, unsafe_allow_code=True)
