@@ -48,7 +48,7 @@ st.write(f"**Incluye:** {detalles}")
 
 # --- BOTÓN DE WHATSAPP ---
 # REEMPLAZA LAS X CON TU NÚMERO (Ejemplo: 5492645556677)
-mi_numero = "549264XXXXXXX" 
+mi_numero = "5492645164757" 
 
 texto_mensaje = f"Hola Diego! Coticé un servicio de {servicio}. Total: ${total_final:,.0f}. ¿Tenés disponibilidad?"
 mensaje_url = urllib.parse.quote(texto_mensaje)
