@@ -61,10 +61,8 @@ st.divider()
 st.subheader("📅 Consultá mi disponibilidad")
 st.write("Fijate si tengo la fecha libre antes de consultar.")
 
-# Usamos tu link dentro del formato que entiende Streamlit
-calendar_html = """
-<iframe src="https://calendar.google.com/calendar/embed?src=goliat4750%40gmail.com&ctz=America%2FArgentina%2FCordoba" 
-style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
-"""
+# Definimos el link de forma limpia
+calendar_url = "https://calendar.google.com/calendar/embed?src=goliat4750%40gmail.com&ctz=America%2FArgentina%2FCordoba"
 
-st.markdown(calendar_html, unsafe_allow_code=True)
+# Usamos un formato que Streamlit no confunda
+st.components.v1.iframe(calendar_url, height=600, scrolling=True)
