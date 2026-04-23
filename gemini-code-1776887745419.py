@@ -68,15 +68,13 @@ st.components.v1.iframe(calendar_url, height=500, scrolling=True)
 st.divider()
 st.subheader("📊 Cotizá tu Servicio")
 
+# Lista de servicios actualizada (Colegios eliminados)
 SERVICIOS = {
-    "Colegios: Promo 2026 (Solo Fotos)": {"base": 8000 * multiplicador, "per_person": True, "desc": "Cobertura fotográfica profesional."},
-    "Colegios: Promo 2026 (Fotos y Video)": {"base": 10000 * multiplicador, "per_person": True, "desc": "Combo de video y fotos."},
-    "Colegios: Promo 2026 (Completo: Fotos, Video y Drone)": {"base": 12000 * multiplicador, "per_person": True, "desc": "Servicio premium con Drone 4K."},
-    "Boda Completa": {"base": 320000 * multiplicador, "con_drone": 390000 * multiplicador, "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."},
     "Evento 15/18 años": {"base": 230000 * multiplicador, "con_drone": 300000 * multiplicador, "desc": "6hs de cobertura, +100 fotos y 1 video."},
+    "Boda Completa": {"base": 320000 * multiplicador, "con_drone": 390000 * multiplicador, "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."},
+    "Bautismo (Iglesia + Fiesta)": {"base": 230000 * multiplicador, "con_drone": 230000 * multiplicador, "desc": "+100 fotos y 1 video."},
     "Video Musical 4K": {"base": 300000 * multiplicador, "con_drone": 300000 * multiplicador, "desc": "Producción profesional de video musical."},
     "Sesión Retrato/Bebé (2hs)": {"base": 40000 * multiplicador, "con_drone": 40000 * multiplicador, "desc": "50-70 fotos digitales."},
-    "Bautismo (Iglesia + Fiesta)": {"base": 230000 * multiplicador, "con_drone": 230000 * multiplicador, "desc": "+100 fotos y 1 video."},
     "Evento (Solo Fotos)": {"base": 180000 * multiplicador, "con_drone": 180000 * multiplicador, "desc": "Cobertura fotográfica profesional."}
 }
 
@@ -90,12 +88,8 @@ DEPARTAMENTOS = {
 servicio_nom = st.selectbox("¿Qué tipo de servicio buscás?", list(SERVICIOS.keys()))
 datos = SERVICIOS[servicio_nom]
 
-if datos.get("per_person"):
-    cantidad = st.number_input("¿Cuántos alumnos son?", min_value=1, value=25, step=1)
-    con_drone = False 
-else:
-    cantidad = 1
-    con_drone = st.checkbox("¿Querés incluir tomas con Drone 4K?")
+# Opciones de drone (excepto si es sesión que no lo requiere o el precio es el mismo)
+con_drone = st.checkbox("¿Querés incluir tomas con Drone 4K?")
 
 lugar_evento = st.selectbox("¿En qué departamento es el evento?", list(DEPARTAMENTOS.keys()))
 
@@ -103,23 +97,13 @@ lugar_evento = st.selectbox("¿En qué departamento es el evento?", list(DEPARTA
 km_ida = DEPARTAMENTOS[lugar_evento]
 viaticos = km_ida * 1000
 
-if datos.get("per_person"):
-    total_final = (datos["base"] * cantidad) + viaticos
-    precio_alumno = datos["base"]
-else:
-    subtotal = datos["con_drone"] if con_drone else datos["base"]
-    total_final = subtotal + viaticos
+subtotal = datos["con_drone"] if con_drone else datos["base"]
+total_final = subtotal + viaticos
 
 # --- MOSTRAR RESULTADO ---
 st.write("---")
-if datos.get("per_person"):
-    c1, c2 = st.columns(2)
-    c1.metric(label="Precio por Alumno", value=f"${precio_alumno:,.0f}")
-    c2.metric(label="Total Grupo (con traslado)", value=f"${total_final:,.0f}")
-else:
-    st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
+st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
 
-# NUEVA REDACCIÓN DE ENTREGA
 st.write(f"📝 **Incluye:** {datos['desc']}")
 st.success(f"⚡ **Entrega Express:** Todo el material editado estará disponible en **48 horas**.")
 st.write("📂 **Método:** Subido a **Google Drive** para descarga directa (disponible por 30 días).")
@@ -135,9 +119,7 @@ if fecha_actual < fecha_aumento:
 # --- SECCIÓN 3: CONTACTO ---
 mi_numero = "5492645164757" 
 msg_total = total_final
-detalle_msg = "con Drone" if not datos.get("per_person") and con_drone else "base"
-if datos.get("per_person"):
-    detalle_msg = f"para {cantidad} alumnos"
+detalle_msg = "con Drone" if con_drone else "base"
 
 texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' {detalle_msg} en {lugar_evento}. Total: ${msg_total:,.0f}."
 mensaje_url = urllib.parse.quote(texto_mensaje)
