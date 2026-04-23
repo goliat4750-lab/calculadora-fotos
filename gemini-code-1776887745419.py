@@ -8,26 +8,21 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- ESTILOS PERSONALIZADOS (Colores DL Fotografía) ---
+# --- ESTILOS PERSONALIZADOS ---
 st.markdown("""
     <style>
-    /* Color de fondo de los botones */
     .stButton>button {
         background-color: #004aad;
         color: white;
         border-radius: 10px;
-        border: None;
     }
-    /* Estilo para las tarjetas de precio */
     [data-testid="stMetricValue"] {
         color: #004aad;
     }
-    /* Color de los checks y selects */
-    .stCheckbox { color: #004aad; }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. Tu Logo
+# 2. Logo principal
 try:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
@@ -35,14 +30,24 @@ try:
 except:
     st.title("DL Fotografía y Video")
 
-# --- SECCIÓN 1: CALENDARIO ---
+# --- SECCIÓN 1: QUINCEAÑERAS ---
 st.divider()
+try:
+    st.image("_DSC7745.jpg", caption="Capturando momentos mágicos", use_container_width=True)
+except:
+    st.write("✨ *Fotografía Profesional de Eventos*")
+
 st.subheader("📅 Disponibilidad de Fechas")
 calendar_url = "https://calendar.google.com/calendar/embed?src=goliat4750%40gmail.com&ctz=America%2FArgentina%2FCordoba"
 st.components.v1.iframe(calendar_url, height=500, scrolling=True)
 
-# --- SECCIÓN 2: CALCULADORA ---
+# --- SECCIÓN 2: BODAS Y CALCULADORA ---
 st.divider()
+try:
+    st.image("_DSC3558.jpg", caption="Tu historia de amor en 4K", use_container_width=True)
+except:
+    pass
+
 st.subheader("📊 Cotizá tu Servicio")
 
 SERVICIOS = {
@@ -96,8 +101,6 @@ if datos.get("per_person"):
     c2.metric(label="Total Grupo (con traslado)", value=f"${total_grupo:,.0f}")
 else:
     st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
-
-st.write(f"📝 **Incluye:** {datos['desc']}")
 
 # --- SECCIÓN 3: CONTACTO ---
 mi_numero = "5492645164757" 
