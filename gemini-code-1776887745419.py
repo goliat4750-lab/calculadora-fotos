@@ -3,28 +3,29 @@ import urllib.parse
 
 # 1. Configuración de la pestaña
 st.set_page_config(
-    # Inyectar CSS para cambiar el color de los botones a azul
-st.markdown("""
-    <style>
-    .stButton>button {
-        background-color: #004aad;
-        color: white;
-        border-radius: 20px;
-        height: 3em;
-        width: 100%;
-    }
-    .stMetric {
-        background-color: #f0f2f6;
-        padding: 15px;
-        border-radius: 10px;
-        border-left: 5px solid #004aad;
-    }
-    </style>
-    """, unsafe_allow_html=True)
     page_title="Presupuestador DL Fotografía", 
     page_icon="logo.png",
     layout="centered"
 )
+
+# --- ESTILOS PERSONALIZADOS (Colores DL Fotografía) ---
+st.markdown("""
+    <style>
+    /* Color de fondo de los botones */
+    .stButton>button {
+        background-color: #004aad;
+        color: white;
+        border-radius: 10px;
+        border: None;
+    }
+    /* Estilo para las tarjetas de precio */
+    [data-testid="stMetricValue"] {
+        color: #004aad;
+    }
+    /* Color de los checks y selects */
+    .stCheckbox { color: #004aad; }
+    </style>
+    """, unsafe_allow_html=True)
 
 # 2. Tu Logo
 try:
@@ -44,7 +45,6 @@ st.components.v1.iframe(calendar_url, height=500, scrolling=True)
 st.divider()
 st.subheader("📊 Cotizá tu Servicio")
 
-# Base de datos con precios FIJOS por alumno
 SERVICIOS = {
     "Colegios: Promo 2026 (Solo Fotos)": {"base": 8000, "per_person": True, "desc": "Cobertura fotográfica profesional."},
     "Colegios: Promo 2026 (Fotos y Video)": {"base": 10000, "per_person": True, "desc": "Combo de video y fotos."},
@@ -64,11 +64,9 @@ DEPARTAMENTOS = {
     "Jáchal": 150, "Iglesia": 170, "Calingasta": 180, "Valle Fértil": 250
 }
 
-# Selección
 servicio_nom = st.selectbox("¿Qué tipo de servicio buscás?", list(SERVICIOS.keys()))
 datos = SERVICIOS[servicio_nom]
 
-# Lógica según el tipo de servicio
 if datos.get("per_person"):
     cantidad = st.number_input("¿Cuántos alumnos son?", min_value=1, value=25, step=1)
     con_drone = False 
@@ -83,10 +81,8 @@ km_ida = DEPARTAMENTOS[lugar_evento]
 viaticos = km_ida * 1000
 
 if datos.get("per_person"):
-    subtotal_grupo = datos["base"] * cantidad
-    total_final = subtotal_grupo + viaticos
-    # El precio por alumno se mantiene en el base que vos pediste
-    precio_mostrar_alumno = datos["base"]
+    total_grupo = (datos["base"] * cantidad) + viaticos
+    precio_alumno = datos["base"]
 else:
     subtotal = datos["con_drone"] if con_drone else datos["base"]
     total_final = subtotal + viaticos
@@ -96,9 +92,8 @@ st.info(f"**Servicio:** {servicio_nom}")
 
 if datos.get("per_person"):
     c1, c2 = st.columns(2)
-    c1.metric(label="Precio por Alumno", value=f"${precio_mostrar_alumno:,.0f}")
-    c2.metric(label="Total Grupo (con traslado)", value=f"${total_final:,.0f}")
-    st.write(f"👥 Presupuesto para un grupo de **{cantidad}** alumnos.")
+    c1.metric(label="Precio por Alumno", value=f"${precio_alumno:,.0f}")
+    c2.metric(label="Total Grupo (con traslado)", value=f"${total_grupo:,.0f}")
 else:
     st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
 
@@ -107,13 +102,15 @@ st.write(f"📝 **Incluye:** {datos['desc']}")
 # --- SECCIÓN 3: CONTACTO ---
 mi_numero = "5492645164757" 
 if datos.get("per_person"):
-    detalle_msg = f"para {cantidad} alumnos a ${precio_mostrar_alumno:,.0f} c/u"
+    msg_total = total_grupo
+    detalle_msg = f"para {cantidad} alumnos a ${precio_alumno:,.0f} c/u"
 else:
+    msg_total = total_final
     detalle_msg = "con Drone" if con_drone else "base"
 
-texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' {detalle_msg} en {lugar_evento}. Total: ${total_final:,.0f}."
+texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' {detalle_msg} en {lugar_evento}. Total: ${msg_total:,.0f}."
 mensaje_url = urllib.parse.quote(texto_mensaje)
 link_whatsapp = f"https://wa.me/{mi_numero}?text={mensaje_url}"
 
 st.write("---")
-st.link_button("📱 Consultar por WhatsApp", link_whatsapp, use_container_width=True)
+st.link_button("📱 Consultar disponibilidad por WhatsApp", link_whatsapp, use_container_width=True)
