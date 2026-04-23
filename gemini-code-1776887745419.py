@@ -8,16 +8,46 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- ESTILOS PERSONALIZADOS ---
+# --- ESTILOS PERSONALIZADOS (Degradado y Colores) ---
 st.markdown("""
     <style>
+    /* Fondo con degradado para toda la página */
+    .stApp {
+        background: linear-gradient(135deg, #001529 0%, #004aad 100%);
+        color: white;
+    }
+    
+    /* Ajuste de color para textos secundarios y etiquetas */
+    .stMarkdown, p, span, label {
+        color: white !important;
+    }
+
+    /* Estilo para los selectores y cajas de entrada */
+    .stSelectbox div[data-baseweb="select"], .stNumberInput div[data-baseweb="input"] {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: white;
+    }
+
+    /* Botón de WhatsApp */
     .stButton>button {
-        background-color: #004aad;
+        background-color: #25d366;
         color: white;
         border-radius: 10px;
+        border: none;
+        font-weight: bold;
     }
+
+    /* Tarjetas de métricas (Precios) */
+    [data-testid="stMetric"] {
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
     [data-testid="stMetricValue"] {
-        color: #004aad;
+        color: #ffffff !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -30,24 +60,15 @@ try:
 except:
     st.title("DL Fotografía y Video")
 
-# --- SECCIÓN 1: QUINCEAÑERAS ---
+# --- SECCIÓN 1: CALENDARIO ---
 st.divider()
-try:
-    st.image("_DSC7745.jpg", caption="Capturando momentos mágicos", use_container_width=True)
-except:
-    st.write("✨ *Fotografía Profesional de Eventos*")
-
 st.subheader("📅 Disponibilidad de Fechas")
 calendar_url = "https://calendar.google.com/calendar/embed?src=goliat4750%40gmail.com&ctz=America%2FArgentina%2FCordoba"
+# Usamos un contenedor para que el calendario resalte sobre el fondo oscuro
 st.components.v1.iframe(calendar_url, height=500, scrolling=True)
 
-# --- SECCIÓN 2: BODAS Y CALCULADORA ---
+# --- SECCIÓN 2: CALCULADORA ---
 st.divider()
-try:
-    st.image("_DSC3558.jpg", caption="Tu historia de amor en 4K", use_container_width=True)
-except:
-    pass
-
 st.subheader("📊 Cotizá tu Servicio")
 
 SERVICIOS = {
@@ -93,14 +114,15 @@ else:
     total_final = subtotal + viaticos
 
 # --- MOSTRAR RESULTADO ---
-st.info(f"**Servicio:** {servicio_nom}")
-
+st.write("---")
 if datos.get("per_person"):
     c1, c2 = st.columns(2)
     c1.metric(label="Precio por Alumno", value=f"${precio_alumno:,.0f}")
     c2.metric(label="Total Grupo (con traslado)", value=f"${total_grupo:,.0f}")
 else:
     st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
+
+st.write(f"📝 **Incluye:** {datos['desc']}")
 
 # --- SECCIÓN 3: CONTACTO ---
 mi_numero = "5492645164757" 
