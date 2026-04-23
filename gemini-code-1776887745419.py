@@ -26,16 +26,16 @@ st.components.v1.iframe(calendar_url, height=500, scrolling=True)
 st.divider()
 st.subheader("📊 Cotizá tu Servicio")
 
-# Base de datos de servicios actualizada
+# Base de datos de servicios con "Colegios" adelante
 SERVICIOS = {
-    "Sesión Retrato/Bebé (2hs)": {"base": 40000, "con_drone": 40000, "desc": "50-70 fotos digitales."},
-    "Evento 15/18 años": {"base": 230000, "con_drone": 300000, "desc": "6hs de cobertura, +100 fotos y 1 video."},
+    "Colegios: Promo 2026 (Solo Fotos)": {"base": 8000, "per_person": True, "desc": "Cobertura fotográfica por alumno."},
+    "Colegios: Promo 2026 (Video + Fotos)": {"base": 10000, "per_person": True, "desc": "Combo de video y fotos por alumno."},
+    "Colegios: Promo 2026 (Combo Full + Drone)": {"base": 12000, "per_person": True, "desc": "Fotos, Video y Drone 4K por alumno."},
     "Boda Completa": {"base": 300000, "con_drone": 370000, "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."},
+    "Evento 15/18 años": {"base": 230000, "con_drone": 300000, "desc": "6hs de cobertura, +100 fotos y 1 video."},
+    "Video Musical 4K": {"base": 300000, "con_drone": 300000, "desc": "Producción profesional de video musical (aprox. 5 min)."},
+    "Sesión Retrato/Bebé (2hs)": {"base": 40000, "con_drone": 40000, "desc": "50-70 fotos digitales."},
     "Bautismo (Iglesia + Fiesta)": {"base": 230000, "con_drone": 230000, "desc": "+100 fotos y 1 video."},
-    "Video Musical 4K": {"base": 300000, "con_drone": 300000, "desc": "Producción profesional (aprox. 5 min)."},
-    "Promo 2026 - Solo Fotos": {"base": 8000, "per_person": True, "desc": "Cobertura fotográfica por alumno."},
-    "Promo 2026 - Video + Fotos": {"base": 10000, "per_person": True, "desc": "Combo de video y fotos por alumno."},
-    "Promo 2026 - Combo Full (Drone)": {"base": 12000, "per_person": True, "desc": "Fotos, Video y Drone 4K por alumno."},
     "Evento (Solo Fotos)": {"base": 180000, "con_drone": 180000, "desc": "Cobertura fotográfica profesional."}
 }
 
@@ -50,19 +50,23 @@ DEPARTAMENTOS = {
 servicio_nom = st.selectbox("¿Qué tipo de servicio buscás?", list(SERVICIOS.keys()))
 datos = SERVICIOS[servicio_nom]
 
-# Lógica especial para Promos (Cantidad de alumnos)
+# Lógica para Promos de Colegios
 cantidad = 1
 if datos.get("per_person"):
-    cantidad = st.number_input("¿Cuántos alumnos son?", min_value=1, value=20, step=1)
-    con_drone = False # Ya está incluido en el precio de la promo full
+    cantidad = st.number_input("¿Cuántos alumnos son?", min_value=1, value=25, step=1)
+    con_drone = False 
 else:
     con_drone = st.checkbox("¿Querés incluir tomas con Drone 4K? 🚁")
 
 lugar_evento = st.selectbox("¿En qué departamento es el evento?", list(DEPARTAMENTOS.keys()))
 
 # --- CÁLCULO FINAL ---
-precio_base = datos["con_drone"] if (not datos.get("per_person") and con_drone) else datos["base"]
-subtotal = precio_base * cantidad
+# Si es por persona, multiplicamos. Si no, usamos base o drone.
+if datos.get("per_person"):
+    subtotal = datos["base"] * cantidad
+else:
+    subtotal = datos["con_drone"] if con_drone else datos["base"]
+
 km_ida = DEPARTAMENTOS[lugar_evento]
 viaticos = km_ida * 1000
 total_final = subtotal + viaticos
@@ -70,16 +74,24 @@ total_final = subtotal + viaticos
 # Mostrar resultado
 st.info(f"**Servicio:** {servicio_nom}")
 if datos.get("per_person"):
-    st.write(f"👥 Presupuesto para {cantidad} alumnos.")
+    st.write(f"👥 Cálculo basado en {cantidad} alumnos.")
 
 st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
-st.caption(f"Detalle: {datos['desc']}")
+st.write(f"📝 {datos['desc']}")
 
 # --- SECCIÓN 3: CONTACTO ---
 mi_numero = "5492645164757" 
-texto_mensaje = f"Hola Diego! Coticé un {servicio_nom} en {lugar_evento} para {cantidad} personas. Total: ${total_final:,.0f}."
+# Personalizamos el mensaje de WhatsApp según el tipo de servicio
+if datos.get("per_person"):
+    detalle_msg = f"para {cantidad} alumnos"
+else:
+    detalle_msg = "con Drone" if con_drone else "base"
+
+texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' {detalle_msg} en {lugar_evento}. El total es ${total_final:,.0f}. ¿Hablamos?"
 mensaje_url = urllib.parse.quote(texto_mensaje)
 link_whatsapp = f"https://wa.me/{mi_numero}?text={mensaje_url}"
 
 st.write("---")
 st.link_button("📱 Consultar por WhatsApp", link_whatsapp, use_container_width=True)
+
+
