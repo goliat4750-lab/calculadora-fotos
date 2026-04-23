@@ -17,18 +17,25 @@ multiplicador = 1.20 if fecha_actual >= fecha_aumento else 1.0
 # --- ESTILOS PERSONALIZADOS ---
 st.markdown("""
     <style>
+    /* Estilo general de la app */
     .stApp {
         background: linear-gradient(135deg, #004aad 0%, #6a0dad 100%);
         color: white;
     }
+    
+    /* Textos en blanco */
     .stMarkdown, p, span, label, h1, h2, h3 {
         color: white !important;
     }
+
+    /* Selectores con fondo traslúcido */
     .stSelectbox div[data-baseweb="select"], .stNumberInput div[data-baseweb="input"] {
         background-color: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 10px;
     }
+
+    /* Botón de WhatsApp */
     .stButton>button {
         background-color: #25d366;
         color: white;
@@ -37,6 +44,8 @@ st.markdown("""
         font-weight: bold;
         box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
     }
+
+    /* Tarjetas de métricas */
     [data-testid="stMetric"] {
         background-color: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
@@ -44,19 +53,64 @@ st.markdown("""
         border-radius: 15px;
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
+    
     [data-testid="stMetricValue"] {
         color: #ffffff !important;
     }
+
+    /* === NUEVO ESTILO PARA EL FONDO DEL LOGO === */
+    .logo-container {
+        position: relative;
+        width: 100%;
+        height: 300px; /* Ajusta la altura a tu gusto */
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 20px;
+        box-shadow: 0px 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* ABAJO: Cambia "_DSC3558.jpg" por el nombre de tu foto llamativa */
+        background-image: url('_DSC3558.jpg'); 
+        background-size: cover;
+        background-position: center;
+        filter: blur(3px) brightness(0.6); /* Desenfoque y oscurecimiento para resaltar logo */
+        z-index: 1;
+    }
+
+    .logo-image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 80%; /* Ajusta el tamaño del logo */
+        max-height: 80%;
+        z-index: 2;
+        filter: drop-shadow(0px 5px 15px rgba(0,0,0,0.8)); /* Sombra para el logo PNG */
+    }
+    /* =========================================== */
     </style>
     """, unsafe_allow_html=True)
 
-# 2. Logo principal
+# 2. SECCIÓN DEL LOGO CON IMAGEN DE FONDO
+st.write("---") # Una línea divisoria antes de la sección
 try:
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.image("logo.png", use_container_width=True)
+    # Creamos el contenedor HTML con la imagen de fondo y el logo encima
+    st.markdown(f"""
+        <div class="logo-container">
+            <div class="background-image"></div>
+            <img src="logo.png" class="logo-image" alt="DL Fotografía y Video">
+        </div>
+    """, unsafe_allow_html=True)
 except:
+    # Si las imágenes no cargan, mostramos el título como respaldo
     st.title("DL Fotografía y Video")
+
 
 # --- SECCIÓN 1: CALENDARIO ---
 st.divider()
@@ -68,7 +122,7 @@ st.components.v1.iframe(calendar_url, height=500, scrolling=True)
 st.divider()
 st.subheader("📊 Cotizá tu Servicio")
 
-# Lista de servicios actualizada (Colegios eliminados)
+# Lista de servicios actualizada
 SERVICIOS = {
     "Evento 15/18 años": {"base": 230000 * multiplicador, "con_drone": 300000 * multiplicador, "desc": "6hs de cobertura, +100 fotos y 1 video."},
     "Boda Completa": {"base": 320000 * multiplicador, "con_drone": 390000 * multiplicador, "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."},
@@ -88,7 +142,7 @@ DEPARTAMENTOS = {
 servicio_nom = st.selectbox("¿Qué tipo de servicio buscás?", list(SERVICIOS.keys()))
 datos = SERVICIOS[servicio_nom]
 
-# Opciones de drone (excepto si es sesión que no lo requiere o el precio es el mismo)
+# Opciones de drone
 con_drone = st.checkbox("¿Querés incluir tomas con Drone 4K?")
 
 lugar_evento = st.selectbox("¿En qué departamento es el evento?", list(DEPARTAMENTOS.keys()))
