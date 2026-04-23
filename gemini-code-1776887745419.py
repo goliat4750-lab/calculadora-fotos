@@ -9,11 +9,9 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- LÓGICA DE ACTUALIZACIÓN AUTOMÁTICA (1 DE JUNIO) ---
+# --- LÓGICA DE ACTUALIZACIÓN AUTOMÁTICA ---
 fecha_actual = datetime.now()
 fecha_aumento = datetime(2026, 6, 1)
-
-# Si hoy es 1 de junio o después, el multiplicador es 1.20 (20% de aumento)
 multiplicador = 1.20 if fecha_actual >= fecha_aumento else 1.0
 
 # --- ESTILOS PERSONALIZADOS ---
@@ -70,7 +68,6 @@ st.components.v1.iframe(calendar_url, height=500, scrolling=True)
 st.divider()
 st.subheader("📊 Cotizá tu Servicio")
 
-# Los precios base se multiplican automáticamente por el factor de ajuste
 SERVICIOS = {
     "Colegios: Promo 2026 (Solo Fotos)": {"base": 8000 * multiplicador, "per_person": True, "desc": "Cobertura fotográfica profesional."},
     "Colegios: Promo 2026 (Fotos y Video)": {"base": 10000 * multiplicador, "per_person": True, "desc": "Combo de video y fotos."},
@@ -98,7 +95,7 @@ if datos.get("per_person"):
     con_drone = False 
 else:
     cantidad = 1
-    con_drone = st.checkbox("¿Querés incluir tomas con Drone 4K? ")
+    con_drone = st.checkbox("¿Querés incluir tomas con Drone 4K?")
 
 lugar_evento = st.selectbox("¿En qué departamento es el evento?", list(DEPARTAMENTOS.keys()))
 
@@ -122,8 +119,10 @@ if datos.get("per_person"):
 else:
     st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
 
+# NUEVA REDACCIÓN DE ENTREGA
 st.write(f"📝 **Incluye:** {datos['desc']}")
-st.write("📂 **Entrega:** Material editado en alta calidad, subido a **Google Drive** para descarga directa.")
+st.success(f"⚡ **Entrega Express:** Todo el material editado estará disponible en **48 horas**.")
+st.write("📂 **Método:** Subido a **Google Drive** para descarga directa (disponible por 30 días).")
 
 # --- SECCIÓN DE ADVERTENCIA POR INFLACIÓN ---
 if fecha_actual < fecha_aumento:
