@@ -1,6 +1,12 @@
 import streamlit as st
 import urllib.parse
 from datetime import datetime
+import base64
+
+# Funciòn para convertir imagen a Base64
+def get_base64_image(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
 
 # 1. Configuración de la pestaña
 st.set_page_config(
@@ -9,47 +15,30 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- LÓGICA DE ACTUALIZACIÓN AUTOMÁTICA ---
+# Lógica de precios
 fecha_actual = datetime.now()
 fecha_aumento = datetime(2026, 6, 1)
 multiplicador = 1.20 if fecha_actual >= fecha_aumento else 1.0
 
-# --- ESTILOS PERSONALIZADOS ---
-st.markdown("""
+# Intentamos cargar la imagen de fondo y el logo en Base64
+try:
+    img_fondo_base64 = get_base64_image("_DSC3558.jpg")
+    logo_base64 = get_base64_image("logo.png")
+except:
+    img_fondo_base64 = ""
+    logo_base64 = ""
+
+# --- ESTILOS ---
+st.markdown(f"""
     <style>
-    .stApp {
+    .stApp {{
         background: linear-gradient(135deg, #004aad 0%, #6a0dad 100%);
         color: white;
-    }
-    .stMarkdown, p, span, label, h1, h2, h3 {
-        color: white !important;
-    }
-    .stSelectbox div[data-baseweb="select"], .stNumberInput div[data-baseweb="input"] {
-        background-color: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
-    }
-    .stButton>button {
-        background-color: #25d366;
-        color: white;
-        border-radius: 10px;
-        border: none;
-        font-weight: bold;
-        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
-    }
-    [data-testid="stMetric"] {
-        background-color: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        padding: 15px;
-        border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    [data-testid="stMetricValue"] {
-        color: #ffffff !important;
-    }
+    }}
+    .stMarkdown, p, span, label, h1, h2, h3 {{ color: white !important; }}
 
-    /* === ESTILO PARA EL FONDO DEL LOGO CON TU FOTO === */
-    .logo-container {
+    /* CONTENEDOR DEL LOGO CON TU FOTO _DSC3558.jpg */
+    .logo-container {{
         position: relative;
         width: 100%;
         height: 350px;
@@ -58,49 +47,44 @@ st.markdown("""
         margin-bottom: 20px;
         box-shadow: 0px 10px 30px rgba(0,0,0,0.5);
         border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    .background-image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url('_DSC3558.jpg'); 
+        background-image: url("data:image/jpg;base64,{img_fondo_base64}");
         background-size: cover;
         background-position: center;
-        filter: blur(2px) brightness(0.5);
-        z-index: 1;
-    }
-    .logo-image {
+    }}
+    
+    .overlay {{
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        max-width: 75%; 
-        z-index: 2;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.4); /* Oscurece un poco la foto */
+        backdrop-filter: blur(2px); /* Desenfoque suave */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }}
+
+    .logo-image {{
+        max-width: 75%;
         filter: drop-shadow(0px 8px 20px rgba(0,0,0,0.9));
-    }
+    }}
+    
+    /* Botón y tarjetas */
+    .stButton>button {{ background-color: #25d366; color: white; border-radius: 10px; font-weight: bold; }}
+    [data-testid="stMetric"] {{ background-color: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 15px; border-radius: 15px; }}
     </style>
-    """, unsafe_allow_html=True)
 
-# 2. SECCIÓN DEL LOGO CON IMAGEN DE FONDO
-try:
-    st.markdown(f"""
-        <div class="logo-container">
-            <div class="background-image"></div>
-            <img src="logo.png" class="logo-image" alt="DL Fotografía y Video">
+    <div class="logo-container">
+        <div class="overlay">
+            <img src="data:image/png;base64,{logo_base64}" class="logo-image">
         </div>
+    </div>
     """, unsafe_allow_html=True)
-except:
-    st.title("DL Fotografía y Video")
 
-# --- SECCIÓN 1: CALENDARIO ---
+# --- RESTO DEL CÓDIGO (Calculadora y WhatsApp) ---
 st.divider()
 st.subheader("📅 Disponibilidad de Fechas")
 calendar_url = "https://calendar.google.com/calendar/embed?src=goliat4750%40gmail.com&ctz=America%2FArgentina%2FCordoba"
 st.components.v1.iframe(calendar_url, height=500, scrolling=True)
 
-# --- SECCIÓN 2: CALCULADORA ---
 st.divider()
 st.subheader("📊 Cotizá tu Servicio")
 
@@ -125,35 +109,18 @@ datos = SERVICIOS[servicio_nom]
 con_drone = st.checkbox("¿Querés incluir tomas con Drone 4K?")
 lugar_evento = st.selectbox("¿En qué departamento es el evento?", list(DEPARTAMENTOS.keys()))
 
-# --- CÁLCULO ---
-km_ida = DEPARTAMENTOS[lugar_evento]
-viaticos = km_ida * 1000
-subtotal = datos["con_drone"] if con_drone else datos["base"]
-total_final = subtotal + viaticos
+total_final = (datos["con_drone"] if con_drone else datos["base"]) + (DEPARTAMENTOS[lugar_evento] * 1000)
 
-# --- MOSTRAR RESULTADO ---
 st.write("---")
 st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
 st.write(f"📝 **Incluye:** {datos['desc']}")
-st.success(f"⚡ **Entrega Express:** Todo el material editado estará disponible en **48 horas**.")
-st.write("📂 **Método:** Subido a **Google Drive** para descarga directa (disponible por 30 días).")
+st.success("⚡ **Entrega Express:** Todo el material editado disponible en **48 horas** en **Google Drive**.")
 
-# --- SECCIÓN DE ADVERTENCIA POR INFLACIÓN ---
 if fecha_actual < fecha_aumento:
-    st.info(
-        "⚠️ **Validez del Presupuesto:** Los valores se mantienen firmes "
-        "únicamente hasta el **31 de mayo de 2026**. \n\n"
-        "💡 *El precio se congela exclusivamente mediante el pago de la seña.*"
-    )
+    st.info("⚠️ **Validez:** Precios firmes hasta el **31 de mayo de 2026**.")
 
-# --- SECCIÓN 3: CONTACTO ---
-mi_numero = "5492645164757" 
-msg_total = total_final
-detalle_msg = "con Drone" if con_drone else "base"
-texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' {detalle_msg} en {lugar_evento}. Total: ${msg_total:,.0f}."
-mensaje_url = urllib.parse.quote(texto_mensaje)
-link_whatsapp = f"https://wa.me/{mi_numero}?text={mensaje_url}"
-
-st.write("---")
-st.link_button("📱 Consultar disponibilidad por WhatsApp", link_whatsapp, use_container_width=True)
+# Botón WhatsApp
+mi_numero = "5492645164757"
+texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' en {lugar_evento}. Total: ${total_final:,.0f}."
+st.link_button("📱 Consultar por WhatsApp", f"https://wa.me/{mi_numero}?text={urllib.parse.quote(texto_mensaje)}", use_container_width=True)
 st.caption("DL Fotografía y Video | Albardón, San Juan")
