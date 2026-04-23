@@ -4,7 +4,7 @@ import urllib.parse
 # 1. Configuración de la pestaña con tu logo
 st.set_page_config(
     page_title="Presupuestador DL Fotografía", 
-    page_icon="Sin-título-1.png",
+    page_icon="logo.png",
     layout="centered"
 )
 
