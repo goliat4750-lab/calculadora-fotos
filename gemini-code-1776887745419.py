@@ -11,7 +11,7 @@ st.set_page_config(
 # 2. Tu Logo de DL Fotografía y Video
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("Sin-título-1.png", use_container_width=True)
+    st.image("logo.png", use_container_width=True)
 
 # --- SECCIÓN 1: CALENDARIO (PRIMERO) ---
 st.divider()
