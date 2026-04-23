@@ -1,5 +1,6 @@
 import streamlit as st
 import urllib.parse
+from datetime import datetime
 
 # 1. Configuración de la pestaña
 st.set_page_config(
@@ -7,6 +8,13 @@ st.set_page_config(
     page_icon="logo.png",
     layout="centered"
 )
+
+# --- LÓGICA DE ACTUALIZACIÓN AUTOMÁTICA (1 DE JUNIO) ---
+fecha_actual = datetime.now()
+fecha_aumento = datetime(2026, 6, 1)
+
+# Si hoy es 1 de junio o después, el multiplicador es 1.20 (20% de aumento)
+multiplicador = 1.20 if fecha_actual >= fecha_aumento else 1.0
 
 # --- ESTILOS PERSONALIZADOS ---
 st.markdown("""
@@ -62,16 +70,17 @@ st.components.v1.iframe(calendar_url, height=500, scrolling=True)
 st.divider()
 st.subheader("📊 Cotizá tu Servicio")
 
+# Los precios base se multiplican automáticamente por el factor de ajuste
 SERVICIOS = {
-    "Colegios: Promo 2026 (Solo Fotos)": {"base": 8000, "per_person": True, "desc": "Cobertura fotográfica profesional."},
-    "Colegios: Promo 2026 (Fotos y Video)": {"base": 10000, "per_person": True, "desc": "Combo de video y fotos."},
-    "Colegios: Promo 2026 (Completo: Fotos, Video y Drone)": {"base": 12000, "per_person": True, "desc": "Servicio premium con Drone 4K."},
-    "Boda Completa": {"base": 320000, "con_drone": 390000, "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."},
-    "Evento 15/18 años": {"base": 230000, "con_drone": 300000, "desc": "6hs de cobertura, +100 fotos y 1 video."},
-    "Video Musical 4K": {"base": 300000, "con_drone": 300000, "desc": "Producción profesional de video musical."},
-    "Sesión Retrato/Bebé (2hs)": {"base": 40000, "con_drone": 40000, "desc": "50-70 fotos digitales."},
-    "Bautismo (Iglesia + Fiesta)": {"base": 230000, "con_drone": 230000, "desc": "+100 fotos y 1 video."},
-    "Evento (Solo Fotos)": {"base": 180000, "con_drone": 180000, "desc": "Cobertura fotográfica profesional."}
+    "Colegios: Promo 2026 (Solo Fotos)": {"base": 8000 * multiplicador, "per_person": True, "desc": "Cobertura fotográfica profesional."},
+    "Colegios: Promo 2026 (Fotos y Video)": {"base": 10000 * multiplicador, "per_person": True, "desc": "Combo de video y fotos."},
+    "Colegios: Promo 2026 (Completo: Fotos, Video y Drone)": {"base": 12000 * multiplicador, "per_person": True, "desc": "Servicio premium con Drone 4K."},
+    "Boda Completa": {"base": 320000 * multiplicador, "con_drone": 390000 * multiplicador, "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."},
+    "Evento 15/18 años": {"base": 230000 * multiplicador, "con_drone": 300000 * multiplicador, "desc": "6hs de cobertura, +100 fotos y 1 video."},
+    "Video Musical 4K": {"base": 300000 * multiplicador, "con_drone": 300000 * multiplicador, "desc": "Producción profesional de video musical."},
+    "Sesión Retrato/Bebé (2hs)": {"base": 40000 * multiplicador, "con_drone": 40000 * multiplicador, "desc": "50-70 fotos digitales."},
+    "Bautismo (Iglesia + Fiesta)": {"base": 230000 * multiplicador, "con_drone": 230000 * multiplicador, "desc": "+100 fotos y 1 video."},
+    "Evento (Solo Fotos)": {"base": 180000 * multiplicador, "con_drone": 180000 * multiplicador, "desc": "Cobertura fotográfica profesional."}
 }
 
 DEPARTAMENTOS = {
@@ -114,23 +123,22 @@ else:
     st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
 
 st.write(f"📝 **Incluye:** {datos['desc']}")
+st.write("📂 **Entrega:** Material editado en alta calidad, subido a **Google Drive** para descarga directa.")
 
-# --- NUEVA SECCIÓN DE ADVERTENCIA POR INFLACIÓN ---
-st.info(
-    "⚠️ **Validez del Presupuesto:** Debido al contexto económico actual, "
-    "estos valores están sujetos a reajuste y se mantienen firmes "
-    "únicamente hasta el **31 de mayo de 2026**. \n\n"
-    "💡 *El precio se congela exclusivamente mediante el pago de la seña.*"
-)
+# --- SECCIÓN DE ADVERTENCIA POR INFLACIÓN ---
+if fecha_actual < fecha_aumento:
+    st.info(
+        "⚠️ **Validez del Presupuesto:** Los valores se mantienen firmes "
+        "únicamente hasta el **31 de mayo de 2026**. \n\n"
+        "💡 *El precio se congela exclusivamente mediante el pago de la seña.*"
+    )
 
 # --- SECCIÓN 3: CONTACTO ---
 mi_numero = "5492645164757" 
+msg_total = total_final
+detalle_msg = "con Drone" if not datos.get("per_person") and con_drone else "base"
 if datos.get("per_person"):
-    msg_total = total_final
-    detalle_msg = f"para {cantidad} alumnos a ${precio_alumno:,.0f} c/u"
-else:
-    msg_total = total_final
-    detalle_msg = "con Drone" if con_drone else "base"
+    detalle_msg = f"para {cantidad} alumnos"
 
 texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' {detalle_msg} en {lugar_evento}. Total: ${msg_total:,.0f}."
 mensaje_url = urllib.parse.quote(texto_mensaje)
