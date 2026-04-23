@@ -8,57 +8,53 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- ESTILOS PERSONALIZADOS (Contraste para resaltar el logo) ---
+# --- ESTILOS PERSONALIZADOS (Fusión Azul y Violeta) ---
 st.markdown("""
     <style>
-    /* Fondo degradado oscuro (Gris espacial / Negro) */
+    /* Fondo degradado Azul a Violeta oscuro */
     .stApp {
-        background: linear-gradient(180deg, #0f0f0f 0%, #2c2c2c 100%);
+        background: linear-gradient(135deg, #004aad 0%, #6a0dad 100%);
         color: white;
     }
     
-    /* Forzar que los textos sean blancos para que resalten */
+    /* Textos en blanco */
     .stMarkdown, p, span, label, h1, h2, h3 {
         color: white !important;
     }
 
-    /* Estilo para los selectores (más oscuros para que no chillen) */
+    /* Selectores con fondo traslúcido */
     .stSelectbox div[data-baseweb="select"], .stNumberInput div[data-baseweb="input"] {
-        background-color: rgba(255, 255, 255, 0.05);
+        background-color: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 10px;
     }
 
-    /* Botón de WhatsApp en verde vibrante */
+    /* Botón de WhatsApp */
     .stButton>button {
         background-color: #25d366;
         color: white;
         border-radius: 10px;
         border: none;
         font-weight: bold;
-        transition: 0.3s;
-    }
-    .stButton>button:hover {
-        background-color: #128c7e;
-        transform: scale(1.02);
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
     }
 
-    /* Tarjetas de métricas con borde azul (el azul de tu logo) */
+    /* Tarjetas de métricas */
     [data-testid="stMetric"] {
-        background-color: rgba(0, 0, 0, 0.3);
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
         padding: 15px;
         border-radius: 15px;
-        border: 1px solid #004aad; /* Usamos el azul de tu logo como acento */
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
     [data-testid="stMetricValue"] {
         color: #ffffff !important;
-        font-weight: bold;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. Logo principal (Ahora va a resaltar mucho más)
+# 2. Logo principal
 try:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
@@ -82,7 +78,7 @@ SERVICIOS = {
     "Colegios: Promo 2026 (Completo: Fotos, Video y Drone)": {"base": 12000, "per_person": True, "desc": "Servicio premium con Drone 4K."},
     "Boda Completa": {"base": 300000, "con_drone": 370000, "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."},
     "Evento 15/18 años": {"base": 230000, "con_drone": 300000, "desc": "6hs de cobertura, +100 fotos y 1 video."},
-    "Video Musical 4K": {"base": 300000, "con_drone": 300000, "desc": "Producción profesional de video musical (aprox. 5 min)."},
+    "Video Musical 4K": {"base": 300000, "con_drone": 300000, "desc": "Producción profesional de video musical."},
     "Sesión Retrato/Bebé (2hs)": {"base": 40000, "con_drone": 40000, "desc": "50-70 fotos digitales."},
     "Bautismo (Iglesia + Fiesta)": {"base": 230000, "con_drone": 230000, "desc": "+100 fotos y 1 video."},
     "Evento (Solo Fotos)": {"base": 180000, "con_drone": 180000, "desc": "Cobertura fotográfica profesional."}
@@ -103,7 +99,8 @@ if datos.get("per_person"):
     con_drone = False 
 else:
     cantidad = 1
-    con_drone = st.checkbox("¿Querés incluir tomas con Drone 4K? 🚁")
+    # CAMBIO AQUÍ: Ícono de drone actualizado
+    con_drone = st.checkbox("¿Querés incluir tomas con Drone 4K? 🎮📸")
 
 lugar_evento = st.selectbox("¿En qué departamento es el evento?", list(DEPARTAMENTOS.keys()))
 
@@ -143,4 +140,5 @@ mensaje_url = urllib.parse.quote(texto_mensaje)
 link_whatsapp = f"https://wa.me/{mi_numero}?text={mensaje_url}"
 
 st.write("---")
+st.link_button("📱 Consultar disponibilidad por WhatsApp", link_whatsapp, use_container_width=True)
 st.link_button("📱 Consultar disponibilidad por WhatsApp", link_whatsapp, use_container_width=True)
