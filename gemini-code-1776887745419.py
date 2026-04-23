@@ -76,7 +76,7 @@ SERVICIOS = {
     "Colegios: Promo 2026 (Solo Fotos)": {"base": 8000, "per_person": True, "desc": "Cobertura fotográfica profesional."},
     "Colegios: Promo 2026 (Fotos y Video)": {"base": 10000, "per_person": True, "desc": "Combo de video y fotos."},
     "Colegios: Promo 2026 (Completo: Fotos, Video y Drone)": {"base": 12000, "per_person": True, "desc": "Servicio premium con Drone 4K."},
-    "Boda Completa": {"base": 300000, "con_drone": 370000, "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."},
+    "Boda Completa": {"base": 320000, "con_drone": 390000, "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."},
     "Evento 15/18 años": {"base": 230000, "con_drone": 300000, "desc": "6hs de cobertura, +100 fotos y 1 video."},
     "Video Musical 4K": {"base": 300000, "con_drone": 300000, "desc": "Producción profesional de video musical."},
     "Sesión Retrato/Bebé (2hs)": {"base": 40000, "con_drone": 40000, "desc": "50-70 fotos digitales."},
