@@ -8,51 +8,57 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- ESTILOS PERSONALIZADOS (Degradado y Colores) ---
+# --- ESTILOS PERSONALIZADOS (Contraste para resaltar el logo) ---
 st.markdown("""
     <style>
-    /* Fondo con degradado para toda la página */
+    /* Fondo degradado oscuro (Gris espacial / Negro) */
     .stApp {
-        background: linear-gradient(135deg, #001529 0%, #004aad 100%);
+        background: linear-gradient(180deg, #0f0f0f 0%, #2c2c2c 100%);
         color: white;
     }
     
-    /* Ajuste de color para textos secundarios y etiquetas */
-    .stMarkdown, p, span, label {
+    /* Forzar que los textos sean blancos para que resalten */
+    .stMarkdown, p, span, label, h1, h2, h3 {
         color: white !important;
     }
 
-    /* Estilo para los selectores y cajas de entrada */
+    /* Estilo para los selectores (más oscuros para que no chillen) */
     .stSelectbox div[data-baseweb="select"], .stNumberInput div[data-baseweb="input"] {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 10px;
-        color: white;
     }
 
-    /* Botón de WhatsApp */
+    /* Botón de WhatsApp en verde vibrante */
     .stButton>button {
         background-color: #25d366;
         color: white;
         border-radius: 10px;
         border: none;
         font-weight: bold;
+        transition: 0.3s;
+    }
+    .stButton>button:hover {
+        background-color: #128c7e;
+        transform: scale(1.02);
     }
 
-    /* Tarjetas de métricas (Precios) */
+    /* Tarjetas de métricas con borde azul (el azul de tu logo) */
     [data-testid="stMetric"] {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(0, 0, 0, 0.3);
         padding: 15px;
         border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid #004aad; /* Usamos el azul de tu logo como acento */
     }
     
     [data-testid="stMetricValue"] {
         color: #ffffff !important;
+        font-weight: bold;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. Logo principal
+# 2. Logo principal (Ahora va a resaltar mucho más)
 try:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
@@ -64,7 +70,6 @@ except:
 st.divider()
 st.subheader("📅 Disponibilidad de Fechas")
 calendar_url = "https://calendar.google.com/calendar/embed?src=goliat4750%40gmail.com&ctz=America%2FArgentina%2FCordoba"
-# Usamos un contenedor para que el calendario resalte sobre el fondo oscuro
 st.components.v1.iframe(calendar_url, height=500, scrolling=True)
 
 # --- SECCIÓN 2: CALCULADORA ---
