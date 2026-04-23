@@ -3,6 +3,24 @@ import urllib.parse
 
 # 1. Configuración de la pestaña
 st.set_page_config(
+    # Inyectar CSS para cambiar el color de los botones a azul
+st.markdown("""
+    <style>
+    .stButton>button {
+        background-color: #004aad;
+        color: white;
+        border-radius: 20px;
+        height: 3em;
+        width: 100%;
+    }
+    .stMetric {
+        background-color: #f0f2f6;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 5px solid #004aad;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     page_title="Presupuestador DL Fotografía", 
     page_icon="logo.png",
     layout="centered"
