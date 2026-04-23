@@ -26,9 +26,9 @@ st.components.v1.iframe(calendar_url, height=500, scrolling=True)
 st.divider()
 st.subheader("📊 Cotizá tu Servicio")
 
-# Base de datos de servicios con "Colegios" adelante
+# Base de datos de servicios
 SERVICIOS = {
-    "Colegios: Promo 2026 (Solo Fotos)": {"base": 8000, "per_person": True, "desc": "Cobertura fotográfica por alumno."},
+    "Colegios: Promo 2026 (Solo Fotos)": {"base": 8000, "per_person": True, "desc": "Cobertura fotográfica profesional por alumno."},
     "Colegios: Promo 2026 (Video + Fotos)": {"base": 10000, "per_person": True, "desc": "Combo de video y fotos por alumno."},
     "Colegios: Promo 2026 (Combo Full + Drone)": {"base": 12000, "per_person": True, "desc": "Fotos, Video y Drone 4K por alumno."},
     "Boda Completa": {"base": 300000, "con_drone": 370000, "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."},
@@ -50,7 +50,7 @@ DEPARTAMENTOS = {
 servicio_nom = st.selectbox("¿Qué tipo de servicio buscás?", list(SERVICIOS.keys()))
 datos = SERVICIOS[servicio_nom]
 
-# Lógica para Promos de Colegios
+# Lógica para Colegios
 cantidad = 1
 if datos.get("per_person"):
     cantidad = st.number_input("¿Cuántos alumnos son?", min_value=1, value=25, step=1)
@@ -60,8 +60,7 @@ else:
 
 lugar_evento = st.selectbox("¿En qué departamento es el evento?", list(DEPARTAMENTOS.keys()))
 
-# --- CÁLCULO FINAL ---
-# Si es por persona, multiplicamos. Si no, usamos base o drone.
+# --- CÁLCULO ---
 if datos.get("per_person"):
     subtotal = datos["base"] * cantidad
 else:
@@ -71,27 +70,31 @@ km_ida = DEPARTAMENTOS[lugar_evento]
 viaticos = km_ida * 1000
 total_final = subtotal + viaticos
 
-# Mostrar resultado
+# --- MOSTRAR RESULTADO ---
 st.info(f"**Servicio:** {servicio_nom}")
-if datos.get("per_person"):
-    st.write(f"👥 Cálculo basado en {cantidad} alumnos.")
 
-st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
-st.write(f"📝 {datos['desc']}")
+if datos.get("per_person"):
+    precio_por_alumno = total_final / cantidad
+    col_a, col_b = st.columns(2)
+    col_a.metric(label="Total por Alumno", value=f"${precio_por_alumno:,.0f}")
+    col_b.metric(label="Total del Grupo", value=f"${total_final:,.0f}")
+    st.write(f"👥 Cálculo realizado para un grupo de **{cantidad}** alumnos.")
+else:
+    st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
+
+st.write(f"📝 **Incluye:** {datos['desc']}")
 
 # --- SECCIÓN 3: CONTACTO ---
 mi_numero = "5492645164757" 
-# Personalizamos el mensaje de WhatsApp según el tipo de servicio
 if datos.get("per_person"):
-    detalle_msg = f"para {cantidad} alumnos"
+    detalle_msg = f"para {cantidad} alumnos (a ${precio_por_alumno:,.0f} c/u)"
 else:
     detalle_msg = "con Drone" if con_drone else "base"
 
-texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' {detalle_msg} en {lugar_evento}. El total es ${total_final:,.0f}. ¿Hablamos?"
+texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' {detalle_msg} en {lugar_evento}. El total es ${total_final:,.0f}. ¿Tenés la fecha disponible?"
 mensaje_url = urllib.parse.quote(texto_mensaje)
 link_whatsapp = f"https://wa.me/{mi_numero}?text={mensaje_url}"
 
 st.write("---")
-st.link_button("📱 Consultar por WhatsApp", link_whatsapp, use_container_width=True)
-
+st.link_button("📱 Consultar disponibilidad por WhatsApp", link_whatsapp, use_container_width=True)
 
