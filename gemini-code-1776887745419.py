@@ -83,7 +83,25 @@ SERVICIOS = {
     "Bautismo (Iglesia + Fiesta)": {"base": 230000, "con_drone": 230000, "desc": "+100 fotos y 1 video."},
     "Evento (Solo Fotos)": {"base": 180000, "con_drone": 180000, "desc": "Cobertura fotográfica profesional."}
 }
+import streamlit as st
 
+# ... (Todo tu código de cálculos de precios va aquí arriba) ...
+
+# 1. Busca la línea donde muestras el precio final, algo como:
+st.write(f"El precio total es: ${precio_final}")
+
+# 2. Justo DEBAJO de eso, pega el nuevo bloque de validez:
+st.markdown("---") # Esto dibuja una línea divisoria para que se vea ordenado
+st.markdown("### 📝 Condiciones del Presupuesto")
+
+st.warning(
+    "⚠️ **Nota sobre aranceles:** Los valores expresados en este presupuesto se mantienen vigentes "
+    "hasta el **31 de mayo de 2026**. Pasada esta fecha, los precios quedan sujetos a reajustes "
+    "según la tasa inflacionaria vigente. \n\n"
+    "💡 *Recuerda: El precio del servicio se congela únicamente con el pago de la seña.*"
+)
+
+st.caption("DL Fotografía y Video | San Juan, Argentina")
 DEPARTAMENTOS = {
     "Albardón": 0, "Capital": 15, "Chimbas": 8, "Santa Lucía": 18, "Rivadavia": 20,
     "Rawson": 22, "Pocito": 30, "Caucete": 35, "Angaco": 10, "San Martín": 18,
