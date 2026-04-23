@@ -100,7 +100,7 @@ if datos.get("per_person"):
 else:
     cantidad = 1
     # CAMBIO AQUÍ: Ícono de drone actualizado
-    con_drone = st.checkbox("¿Querés incluir tomas con Drone 4K? 🎮📸")
+    con_drone = st.checkbox("¿Querés incluir tomas con Drone 4K? ")
 
 lugar_evento = st.selectbox("¿En qué departamento es el evento?", list(DEPARTAMENTOS.keys()))
 
@@ -141,4 +141,4 @@ link_whatsapp = f"https://wa.me/{mi_numero}?text={mensaje_url}"
 
 st.write("---")
 st.link_button("📱 Consultar disponibilidad por WhatsApp", link_whatsapp, use_container_width=True)
-st.link_button("📱 Consultar disponibilidad por WhatsApp", link_whatsapp, use_container_width=True)
+
