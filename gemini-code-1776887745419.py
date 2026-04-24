@@ -19,30 +19,35 @@ st.markdown("""
     [data-testid="stToolbar"] {visibility: hidden;}
     .block-container { padding-top: 2rem; }
     .stApp { background-color: #0b0d10; color: white; }
-    .header-box { text-align: center; padding-bottom: 20px; }
+    
+    /* Estilo para forzar el centrado absoluto */
+    .centered-logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding-bottom: 20px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. ENCABEZADO CON LOGO (DETECCIÓN MEJORADA) ---
-st.markdown('<div class="header-box">', unsafe_allow_html=True)
-col_a, col_b, col_c = st.columns([1, 2, 1])
+# --- 3. ENCABEZADO CON LOGO CENTRADO ---
+# Usamos un contenedor único para asegurar el centrado
+logo_nombre = "foto4.png" if os.path.exists("foto4.png") else "foto4.PNG"
 
-with col_b:
-    # Lista de posibles nombres que puede tener tu logo en la carpeta
-    posibles_logos = ["foto4.png", "foto4.PNG", "logo.png", "Logo.png"]
-    logo_encontrado = False
-    
-    for nombre in posibles_logos:
-        if os.path.exists(nombre):
-            st.image(nombre, width=280)
-            logo_encontrado = True
-            break
-    
-    if not logo_encontrado:
-        st.title("DL FOTOGRAFÍA Y VIDEO")
-        st.error("⚠️ No se encuentra el archivo 'foto4.png'. Verificalo en GitHub.")
-
-st.markdown('</div>', unsafe_allow_html=True)
+if os.path.exists(logo_nombre):
+    # Este bloque centra la imagen usando HTML
+    st.markdown(f"""
+        <div class="centered-logo">
+            <img src="app/static/{logo_nombre}" width="280">
+        </div>
+    """, unsafe_allow_html=True)
+    # Si lo anterior no carga por el servidor de Streamlit, usamos el método estándar centrado:
+    col_l1, col_l2, col_l3 = st.columns([1, 2, 1])
+    with col_l2:
+        st.image(logo_nombre, use_container_width=True)
+else:
+    st.markdown("<h1 style='text-align: center;'>DL FOTOGRAFÍA Y VIDEO</h1>", unsafe_allow_html=True)
 
 # --- 4. VIDEO DE BIENVENIDA (TEATRO) ---
 if os.path.exists("teatro.mp4"):
