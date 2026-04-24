@@ -11,7 +11,7 @@ hide_st_style = """
             header {visibility: hidden;}
             </style>
             """
-st.markdown(hide_st_style, unsafe_allow_config=True)
+st.markdown(hide_style, unsafe_allow_html=True)
 
 # 3. Encabezado con tu Logo
 # Aquí usamos el logo que me pasaste
