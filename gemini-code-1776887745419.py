@@ -10,63 +10,54 @@ st.set_page_config(
     layout="wide"
 )
 
-# --- 2. TRUCO PARA OCULTAR PROPAGANDA Y ESTILOS ---
+# --- 2. ESTILOS CSS (PARA OCULTAR MENÚS Y DISEÑO OSCURO) ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     [data-testid="stToolbar"] {visibility: hidden;}
-    .block-container { padding-top: 1rem; }
+    .block-container { padding-top: 2rem; }
     .stApp { background-color: #0b0d10; color: white; }
     
-    /* Estilo para centrar la cabecera */
     .header-box {
         text-align: center;
-        padding: 20px;
+        padding-bottom: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. ENCABEZADO: FOTO Y LOGO ---
+# --- 3. ENCABEZADO CON LOGO ---
 st.markdown('<div class="header-box">', unsafe_allow_html=True)
-col_a, col_b, col_c = st.columns([1, 1, 1])
-
+col_a, col_b, col_c = st.columns([1, 2, 1])
 with col_b:
-    # Mostramos tu foto sentado arriba y chica
-    if os.path.exists("foto1.jpg"):
-        st.image("foto1.jpg", width=150)
-    
-    # Mostramos el logo justo abajo de tu foto
+    # Usamos foto4.png que es tu logo
     if os.path.exists("foto4.png"):
-        st.image("foto4.png", width=220)
+        st.image("foto4.png", width=250)
     else:
-        st.write("### DL Fotografía y Video") # Respaldo si no carga el logo
+        st.header("DL Fotografía y Video")
 st.markdown('</div>', unsafe_allow_html=True)
 
 # --- 4. VIDEO DE BIENVENIDA (TEATRO) ---
 if os.path.exists("teatro.mp4"):
     st.video("teatro.mp4", loop=True, autoplay=True, muted=True)
 
-# --- 5. SECCIÓN: SOBRE MÍ Y DRIVE ---
+# --- 5. SECCIÓN: SOBRE MÍ Y ENTREGA EN DRIVE ---
 st.divider()
-col_video, col_info = st.columns([1, 1.5])
-
-with col_video:
-    if os.path.exists("campo.mp4"):
-        st.write("🎬 **En acción:**")
-        st.video("campo.mp4", loop=True, autoplay=True, muted=True)
-    if os.path.exists("foto3.jpg"):
-        st.image("foto3.jpg", caption="Edición Profesional", width=300)
+col_info, col_extra = st.columns([2, 1])
 
 with col_info:
-    st.header("Diego Lozano - Fotografía y Video")
+    st.header("Sobre mi trabajo")
     st.write("""
-    Especialista en narrativa visual para bodas, 15 años y eventos sociales. 
+    Especialista en narrativa visual para bodas, 15 años y eventos sociales en San Juan. 
     Mi enfoque combina la espontaneidad con la más alta calidad técnica, 
-    utilizando equipos de alta gama y tomas aéreas 4K para un resultado cinematográfico.
+    utilizando equipos profesionales y tomas aéreas 4K para un resultado cinematográfico.
     """)
-    st.success("✅ **Entrega Digital:** Todos los trabajos se entregan mediante una galería privada en **Google Drive** para descarga inmediata.")
+    st.success("✅ **Entrega Digital:** Todos los trabajos se entregan mediante una galería privada en **Google Drive** para descarga inmediata en alta calidad.")
+
+with col_extra:
+    if os.path.exists("foto3.jpg"):
+        st.image("foto3.jpg", caption="Post-producción profesional", use_container_width=True)
 
 # --- 6. CALCULADORA DE PRECIOS ---
 st.divider()
