@@ -10,7 +10,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# --- 2. ESTILOS CSS (PARA OCULTAR MENÚS Y DISEÑO OSCURO) ---
+# --- 2. ESTILOS CSS ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
@@ -19,23 +19,29 @@ st.markdown("""
     [data-testid="stToolbar"] {visibility: hidden;}
     .block-container { padding-top: 2rem; }
     .stApp { background-color: #0b0d10; color: white; }
-    
-    .header-box {
-        text-align: center;
-        padding-bottom: 20px;
-    }
+    .header-box { text-align: center; padding-bottom: 20px; }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. ENCABEZADO CON LOGO ---
+# --- 3. ENCABEZADO CON LOGO (DETECCIÓN MEJORADA) ---
 st.markdown('<div class="header-box">', unsafe_allow_html=True)
 col_a, col_b, col_c = st.columns([1, 2, 1])
+
 with col_b:
-    # Usamos foto4.png que es tu logo
-    if os.path.exists("foto4.png"):
-        st.image("foto4.png", width=250)
-    else:
-        st.header("DL Fotografía y Video")
+    # Lista de posibles nombres que puede tener tu logo en la carpeta
+    posibles_logos = ["foto4.png", "foto4.PNG", "logo.png", "Logo.png"]
+    logo_encontrado = False
+    
+    for nombre in posibles_logos:
+        if os.path.exists(nombre):
+            st.image(nombre, width=280)
+            logo_encontrado = True
+            break
+    
+    if not logo_encontrado:
+        st.title("DL FOTOGRAFÍA Y VIDEO")
+        st.error("⚠️ No se encuentra el archivo 'foto4.png'. Verificalo en GitHub.")
+
 st.markdown('</div>', unsafe_allow_html=True)
 
 # --- 4. VIDEO DE BIENVENIDA (TEATRO) ---
