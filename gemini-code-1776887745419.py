@@ -6,7 +6,7 @@ import os
 # --- 1. CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(
     page_title="DL Fotografía y Video", 
-    page_icon="foto4.png",
+    page_icon="logo.png",
     layout="wide"
 )
 
