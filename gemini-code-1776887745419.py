@@ -33,7 +33,7 @@ st.markdown("""
 
 # --- 3. ENCABEZADO CON LOGO CENTRADO ---
 # Usamos un contenedor único para asegurar el centrado
-logo_nombre = "foto4.png" if os.path.exists("foto4.png") else "foto4.PNG"
+logo_nombre = "logo.png" if os.path.exists("logo.png") else "logo.PNG"
 
 if os.path.exists(logo_nombre):
     # Este bloque centra la imagen usando HTML
