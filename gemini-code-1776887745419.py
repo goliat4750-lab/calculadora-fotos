@@ -10,44 +10,48 @@ st.set_page_config(
     layout="wide"
 )
 
-# --- 2. ESTILOS CSS ---
+# --- 2. ESTILOS CSS DEFINITIVOS ---
 st.markdown("""
     <style>
+    /* Ocultar menús y cabeceras de Streamlit */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     [data-testid="stToolbar"] {visibility: hidden;}
-    .block-container { padding-top: 2rem; }
+    
+    /* ELIMINAR ICONOS FANTASMA Y TOOLBARS DE IMÁGENES */
+    [data-testid="stElementToolbar"] {display: none !important;}
+    
+    /* Limpieza total del espacio superior */
+    .block-container { 
+        padding-top: 0rem !important; 
+        margin-top: -2rem !important;
+    }
+    
     .stApp { background-color: #0b0d10; color: white; }
     
-    /* Estilo para forzar el centrado absoluto */
-    .centered-logo {
+    /* Centrado del logo */
+    .stImage {
         display: flex;
         justify-content: center;
-        align-items: center;
-        width: 100%;
-        padding-bottom: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
 
 # --- 3. ENCABEZADO CON LOGO CENTRADO ---
-# Usamos un contenedor único para asegurar el centrado
-logo_nombre = "logo.png" if os.path.exists("logo.png") else "logo.PNG"
+c1, c2, c3 = st.columns([1, 2, 1])
 
-if os.path.exists(logo_nombre):
-    # Este bloque centra la imagen usando HTML
-    st.markdown(f"""
-        <div class="centered-logo">
-            <img src="app/static/{logo_nombre}" width="280">
-        </div>
-    """, unsafe_allow_html=True)
-    # Si lo anterior no carga por el servidor de Streamlit, usamos el método estándar centrado:
-    col_l1, col_l2, col_l3 = st.columns([1, 2, 1])
-    with col_l2:
-        st.image(logo_nombre, use_container_width=True)
-else:
-    st.markdown("<h1 style='text-align: center;'>DL FOTOGRAFÍA Y VIDEO</h1>", unsafe_allow_html=True)
+with c2:
+    # Cambiado a logo.png según tu indicación
+    logo_path = "logo.png" 
+    if os.path.exists(logo_path):
+        st.image(logo_path, width=280)
+    else:
+        # Intento por si acaso el servidor lo lee en mayúsculas
+        if os.path.exists("logo.PNG"):
+            st.image("logo.PNG", width=280)
+        else:
+            st.markdown("<h2 style='text-align: center;'>DL FOTOGRAFÍA Y VIDEO</h2>", unsafe_allow_html=True)
 
 # --- 4. VIDEO DE BIENVENIDA (TEATRO) ---
 if os.path.exists("teatro.mp4"):
