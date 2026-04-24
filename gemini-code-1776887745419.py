@@ -6,7 +6,7 @@ import os
 # --- 1. CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(
     page_title="DL Fotografía y Video", 
-    page_icon="foto4.png",
+    page_icon="logo.png",
     layout="wide"
 )
 
@@ -28,8 +28,8 @@ st.markdown("""
 # Usamos una estructura que prioriza la carga del logo
 col_logo_1, col_logo_2, col_logo_3 = st.columns([1, 1, 1])
 with col_logo_2:
-    if os.path.exists("foto4.png"):
-        st.image("foto4.png", width=250)
+    if os.path.exists("logo.png"):
+        st.image("logo.png", width=250)
     else:
         st.error("Error: Sube 'foto4.png' a la carpeta principal de GitHub para ver el logo.")
 
