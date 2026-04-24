@@ -2,6 +2,7 @@ import streamlit as st
 import urllib.parse
 from datetime import datetime
 import os
+import base64
 
 # --- 1. CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(
@@ -10,54 +11,61 @@ st.set_page_config(
     layout="wide"
 )
 
-# --- 2. ESTILOS CSS DEFINITIVOS ---
+# --- 2. ESTILOS CSS ---
 st.markdown("""
     <style>
-    /* Ocultar menús y cabeceras de Streamlit */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     [data-testid="stToolbar"] {visibility: hidden;}
-    
-    /* ELIMINAR ICONOS FANTASMA Y TOOLBARS DE IMÁGENES */
     [data-testid="stElementToolbar"] {display: none !important;}
     
-    /* Limpieza total del espacio superior */
     .block-container { 
-        padding-top: 0rem !important; 
-        margin-top: -2rem !important;
+        padding-top: 1rem !important; 
+        margin-top: -1rem !important;
     }
     
     .stApp { background-color: #0b0d10; color: white; }
     
-    /* Centrado del logo */
-    .stImage {
+    /* ESTE ES EL TRUCO PARA EL CENTRADO TOTAL */
+    .centrar-todo {
         display: flex;
         justify-content: center;
+        align-items: center;
+        width: 100%;
+        text-align: center;
+        padding: 20px 0;
+    }
+    
+    .logo-img {
+        max-width: 280px;
+        width: 80%; /* Para que en celular no se pegue a los bordes */
+        height: auto;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. ENCABEZADO CON LOGO CENTRADO ---
-c1, c2, c3 = st.columns([1, 2, 1])
+# --- 3. ENCABEZADO CON LOGO (MÉTODO DE FUERZA BRUTA) ---
+logo_path = "logo.png"
 
-with c2:
-    # Cambiado a logo.png según tu indicación
-    logo_path = "logo.png" 
-    if os.path.exists(logo_path):
-        st.image(logo_path, width=280)
-    else:
-        # Intento por si acaso el servidor lo lee en mayúsculas
-        if os.path.exists("logo.PNG"):
-            st.image("logo.PNG", width=280)
-        else:
-            st.markdown("<h2 style='text-align: center;'>DL FOTOGRAFÍA Y VIDEO</h2>", unsafe_allow_html=True)
+if os.path.exists(logo_path):
+    # Convertimos la imagen a base64 para que el HTML la lea directo sin errores de ruta
+    with open(logo_path, "rb") as f:
+        data = base64.b64encode(f.read()).decode()
+    
+    st.markdown(f"""
+        <div class="centrar-todo">
+            <img src="data:image/png;base64,{data}" class="logo-img">
+        </div>
+    """, unsafe_allow_html=True)
+else:
+    st.markdown("<h2 style='text-align: center;'>DL FOTOGRAFÍA Y VIDEO</h2>", unsafe_allow_html=True)
 
 # --- 4. VIDEO DE BIENVENIDA (TEATRO) ---
 if os.path.exists("teatro.mp4"):
     st.video("teatro.mp4", loop=True, autoplay=True, muted=True)
 
-# --- 5. SECCIÓN: SOBRE MÍ Y ENTREGA EN DRIVE ---
+# --- 5. SECCIÓN: SOBRE MÍ Y DRIVE ---
 st.divider()
 col_info, col_extra = st.columns([2, 1])
 
