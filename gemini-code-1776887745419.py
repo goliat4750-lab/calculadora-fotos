@@ -11,6 +11,15 @@ def get_base64_image(image_path):
             return base64.b64encode(img_file.read()).decode()
     return ""
 
+def render_video(video_path, opacity=1.0, height="350px", loop=True):
+    if os.path.exists(video_path):
+        with open(video_path, "rb") as f:
+            video_bytes = f.read()
+        video_base64 = base64.b64encode(video_bytes).decode()
+        loop_attr = "loop" if loop else ""
+        return f'<video autoplay {loop_attr} muted playsinline style="width: 100%; height: {height}; object-fit: cover; opacity: {opacity}; border-radius: 15px;"><source src="data:video/mp4;base64,{video_base64}" type="video/mp4"></video>'
+    return None
+
 # --- 2. CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(
     page_title="DL Fotografía y Video", 
@@ -19,57 +28,48 @@ st.set_page_config(
 )
 
 # --- 3. TRUCO PARA OCULTAR PROPAGANDA (CSS) ---
-hide_style = """
+st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     [data-testid="stToolbar"] {visibility: hidden;}
-    /* Esto quita el espacio blanco de arriba */
-    .block-container {
-        padding-top: 2rem;
-    }
+    .block-container { padding-top: 1rem; }
+    .stApp { background-color: #0b0d10; color: white; }
+    /* Ajuste global de imágenes */
+    .stImage img { border-radius: 10px; }
     </style>
-"""
-st.markdown(hide_style, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-# --- 4. ESTILOS VISUALES Y HERO SECTION ---
+# --- 4. SECCIÓN DE BIENVENIDA (TEATRO) ---
 logo_base64 = get_base64_image("foto4.png")
+video_html = render_video("teatro.mp4", opacity=0.5, height="400px")
 
-st.markdown(f"""
-    <style>
-    .stApp {{
-        background-color: #0b0d10;
-        color: white;
-    }}
-    .hero-section {{
-        text-align: center;
-        padding: 40px 10px;
-        background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2071&auto=format&fit=crop");
-        background-size: cover;
-        border-radius: 15px;
-        margin-bottom: 30px;
-    }}
-    .logo-img {{
-        max-width: 220px;
-        filter: drop-shadow(0px 0px 12px rgba(0,74,173,0.6));
-    }}
-    </style>
-    <div class="hero-section">
-        <img src="data:image/png;base64,{logo_base64}" class="logo-img">
-        <h1 style='margin-top:15px; font-family: sans-serif;'>DL Fotografía y Video</h1>
-        <p style='font-size: 1.1rem; opacity: 0.9;'>Capturando momentos únicos en San Juan</p>
-    </div>
-    """, unsafe_allow_html=True)
+if video_html:
+    st.markdown(f"""
+        <div style="position: relative; height: 400px; overflow: hidden; border-radius: 15px; margin-bottom: 30px;">
+            <div style="position: absolute; width: 100%; height: 100%;">{video_html}</div>
+            <div style="position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center;">
+                <img src="data:image/png;base64,{logo_base64}" style="max-width: 180px; filter: drop-shadow(0px 0px 15px rgba(0,74,173,0.8));">
+                <h1 style="color: white; margin-top: 15px; text-shadow: 2px 2px 8px rgba(0,0,0,0.9);">DL Fotografía y Video</h1>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+else:
+    st.warning("Subí 'teatro.mp4' para ver el video de fondo.")
 
-# --- 5. SECCIÓN: SOBRE MÍ Y EQUIPOS ---
-col_foto, col_texto = st.columns([1, 1.5])
+# --- 5. SECCIÓN: SOBRE MÍ ---
+col_foto, col_texto = st.columns([1, 2])
 
 with col_foto:
     if os.path.exists("foto1.jpg"):
-        st.image("foto1.jpg", use_container_width=True)
-    else:
-        st.info("Sube 'foto1.jpg' para ver tu perfil.")
+        st.image("foto1.jpg", width=280)
+    
+    # Insertamos tu video del campo aquí (Vertical)
+    video_campo_html = render_video("campo.mp4", height="400px")
+    if video_campo_html:
+        st.markdown("<p style='text-align:center; margin-top:10px;'>En acción</p>", unsafe_allow_html=True)
+        st.markdown(video_campo_html, unsafe_allow_html=True)
 
 with col_texto:
     st.header("Sobre mi trabajo")
@@ -78,15 +78,14 @@ with col_texto:
     bodas, 15 años y eventos sociales en Albardón y toda la provincia.
     
     Mi enfoque combina la espontaneidad del momento con la más alta calidad técnica. 
-    Para garantizar resultados impecables, trabajo con **equipos profesionales**: 
-    cámaras Nikon de alta resolución y tomas aéreas con drone **Potensic Atom 2** en 4K.
+    Para garantizar resultados impecables, utilizo **equipos profesionales de alta gama** y realizo **tomas aéreas en resolución 4K** para lograr una perspectiva cinematográfica única.
     """)
     if os.path.exists("foto3.jpg"):
-        st.image("foto3.jpg", caption="Post-producción profesional", use_container_width=True)
+        st.image("foto3.jpg", caption="Post-producción profesional", width=450)
 
-# --- 6. LÓGICA DE LA CALCULADORA ---
+# --- 6. CALCULADORA ---
 st.divider()
-st.title("📊 Cotizá tu evento al instante")
+st.title("📊 Cotizá tu evento")
 
 fecha_actual = datetime.now()
 fecha_aumento = datetime(2026, 6, 1)
@@ -111,15 +110,14 @@ DEPARTAMENTOS = {
 c1, c2 = st.columns(2)
 with c1:
     servicio_nom = st.selectbox("¿Qué tipo de servicio buscás?", list(SERVICIOS.keys()))
-    con_drone = st.checkbox("¿Incluir tomas con Drone 4K? (Potensic Atom 2)")
+    con_drone = st.checkbox("¿Incluir tomas aéreas 4K?")
 with c2:
-    lugar_evento = st.selectbox("¿En qué departamento es el evento?", list(DEPARTAMENTOS.keys()))
+    lugar_evento = st.selectbox("¿En qué departamento?", list(DEPARTAMENTOS.keys()))
 
 datos = SERVICIOS[servicio_nom]
 total_final = (datos["con_drone"] if con_drone else datos["base"]) + (DEPARTAMENTOS[lugar_evento] * 1000)
 
 st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
-st.info(f"📝 **Incluye:** {datos['desc']} | **Entrega en 48hs vía Google Drive.**")
 
 # --- 7. BOTÓN DE WHATSAPP ---
 mi_numero = "5492645164757"
