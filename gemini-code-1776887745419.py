@@ -2,71 +2,100 @@ import streamlit as st
 import urllib.parse
 from datetime import datetime
 import os
+import base64
 
-# --- 1. CONFIGURACIÓN DE LA PÁGINA ---
+# --- 1. FUNCIONES DE APOYO ---
+def get_base64_image(image_path):
+    if os.path.exists(image_path):
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    return ""
+
+# --- 2. CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(
     page_title="DL Fotografía y Video", 
-    page_icon="logo.png",
+    page_icon="foto4.png",
     layout="wide"
 )
 
-# --- 2. TRUCO PARA OCULTAR PROPAGANDA Y ESTILOS ---
+# --- 3. TRUCO PARA OCULTAR PROPAGANDA Y ESTILOS ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     [data-testid="stToolbar"] {visibility: hidden;}
-    .block-container { padding-top: 2rem; }
+    .block-container { padding-top: 1rem; }
     .stApp { background-color: #0b0d10; color: white; }
-    h1, h2, h3 { color: #004aad; } /* Color azul de tu logo para títulos */
-    .stMetric { background-color: #1a1c23; padding: 15px; border-radius: 10px; border: 1px solid #004aad; }
+    
+    /* Estilo para la cabecera con foto y logo superpuesto */
+    .header-container {
+        position: relative;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .profile-img {
+        width: 150px; /* Tamaño chico para la foto sentado */
+        border-radius: 50%;
+        border: 3px solid #004aad;
+        object-fit: cover;
+    }
+    .logo-overlay {
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120px; /* Logo adelante de la foto */
+        filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.8));
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. ENCABEZADO Y LOGO ---
-# Usamos una estructura que prioriza la carga del logo
-col_logo_1, col_logo_2, col_logo_3 = st.columns([1, 1, 1])
-with col_logo_2:
-    if os.path.exists("logo.png"):
-        st.image("logo.png", width=250)
-    else:
-        st.error("Error: Sube 'foto4.png' a la carpeta principal de GitHub para ver el logo.")
+# --- 4. ENCABEZADO: FOTO ARRIBA CON LOGO ADELANTE ---
+logo_b64 = get_base64_image("foto4.png")
+foto_perfil_b64 = get_base64_image("foto1.jpg")
 
-# --- 4. VIDEO DE BIENVENIDA ---
+if foto_perfil_b64 and logo_b64:
+    st.markdown(f"""
+        <div class="header-container">
+            <img src="data:image/jpeg;base64,{foto_perfil_b64}" class="profile-img">
+            <img src="data:image/png;base64,{logo_b64}" class="logo-overlay">
+        </div>
+        <h2 style='text-align: center; margin-top: 20px;'>Diego Lozano</h2>
+        <p style='text-align: center; opacity: 0.8;'>Fotografía y Video Profesional</p>
+    """, unsafe_allow_html=True)
+else:
+    st.warning("Asegúrate de tener 'foto1.jpg' y 'foto4.png' en GitHub para ver el diseño completo.")
+
+# --- 5. VIDEO DE BIENVENIDA (TEATRO) ---
 if os.path.exists("teatro.mp4"):
     st.video("teatro.mp4", loop=True, autoplay=True, muted=True)
-else:
-    st.info("A la espera de 'teatro.mp4' para el video de fondo.")
 
-# --- 5. SECCIÓN: SOBRE MÍ ---
+# --- 6. SECCIÓN: SOBRE MÍ Y TRABAJO ---
 st.divider()
-col_foto, col_texto = st.columns([1, 1.5])
+col_video, col_info = st.columns([1, 1.5])
 
-with col_foto:
-    if os.path.exists("foto1.jpg"):
-        st.image("foto1.jpg", caption="Diego Lozano", width=250)
-    
+with col_video:
     if os.path.exists("campo.mp4"):
-        st.write("🎬 **Detrás de escena:**")
+        st.write("🎬 **En acción:**")
         st.video("campo.mp4", loop=True, autoplay=True, muted=True)
+    if os.path.exists("foto3.jpg"):
+        st.image("foto3.jpg", caption="Edición Profesional", width=300)
 
-with col_texto:
-    st.header("Sobre mi trabajo")
+with col_info:
+    st.header("Mi Enfoque Profesional")
     st.write("""
     Especialista en narrativa visual para bodas, 15 años y eventos sociales. 
     Mi enfoque combina la espontaneidad con la más alta calidad técnica, 
     utilizando equipos de alta gama y tomas aéreas 4K para un resultado cinematográfico.
     """)
-    if os.path.exists("foto3.jpg"):
-        st.image("foto3.jpg", caption="Edición Profesional", width=350)
+    st.success("✅ **Entrega Digital:** Todos los trabajos se entregan en alta resolución mediante una galería privada en **Google Drive** para que los descargues cuando quieras.")
 
-# --- 6. CALCULADORA DE PRECIOS ---
+# --- 7. CALCULADORA DE PRECIOS ---
 st.divider()
 st.title("📊 Cotizá tu evento")
-st.warning("⚠️ **Nota importante:** Los precios mostrados son vigentes hasta el **31 de Mayo de 2026**.")
+st.warning("⚠️ **Precios vigentes hasta el 31 de Mayo de 2026**")
 
-# Lógica de aumento a partir de Junio
 fecha_actual = datetime.now()
 fecha_aumento = datetime(2026, 6, 1)
 multiplicador = 1.20 if fecha_actual >= fecha_aumento else 1.0
@@ -87,22 +116,22 @@ DEPARTAMENTOS = {
     "Jáchal": 150, "Iglesia": 170, "Calingasta": 180, "Valle Fértil": 250
 }
 
-c_calc1, c_calc2 = st.columns(2)
-with c_calc1:
+c1, c2 = st.columns(2)
+with c1:
     servicio_nom = st.selectbox("¿Qué servicio buscás?", list(SERVICIOS.keys()))
     con_drone = st.checkbox("¿Incluir tomas aéreas 4K?")
-with c_calc2:
+with c2:
     lugar_evento = st.selectbox("¿Departamento?", list(DEPARTAMENTOS.keys()))
 
 datos = SERVICIOS[servicio_nom]
 total_final = (datos["con_drone"] if con_drone else datos["base"]) + (DEPARTAMENTOS[lugar_evento] * 1000)
 
 st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
-st.info(f"📝 **Detalle del servicio:** {datos['desc']}")
+st.info(f"📝 **Incluye:** {datos['desc']} | ☁️ **Entrega vía Google Drive**.")
 
-# --- 7. BOTÓN DE WHATSAPP ---
+# --- 8. BOTÓN DE WHATSAPP ---
 mi_numero = "5492645164757"
-texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' en {lugar_evento}. Total: ${total_final:,.0f}. (Vigente hasta Mayo)"
+texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' en {lugar_evento}. Total: ${total_final:,.0f}. Entrega en Drive."
 st.link_button("📱 Consultar disponibilidad por WhatsApp", 
                f"https://wa.me/{mi_numero}?text={urllib.parse.quote(texto_mensaje)}", 
                use_container_width=True)
