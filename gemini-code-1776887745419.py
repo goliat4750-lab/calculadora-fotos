@@ -82,7 +82,7 @@ st.warning("⚠️ **Precios vigentes hasta el 31 de Mayo de 2026**")
 SERVICIOS = {
     "Evento 15/18 años": {
         "base": 320000, 
-        "con_drone": 365000, 
+        "con_drone": 400000, 
         "desc": "6hs de cobertura, +100 fotos editadas y video hd."
     },
     "Boda Completa": {
