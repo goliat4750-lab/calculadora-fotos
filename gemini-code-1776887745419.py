@@ -41,6 +41,23 @@ st.markdown("""
         width: 80%; 
         height: auto;
     }
+    
+    /* Estilo para el contenedor del calendario */
+    .calendar-container {
+        position: relative;
+        padding-bottom: 75%;
+        height: 0;
+        overflow: hidden;
+        border-radius: 10px;
+        border: 1px solid #333;
+    }
+    .calendar-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -78,38 +95,13 @@ st.divider()
 st.title("📊 Cotizá tu evento")
 st.warning("⚠️ **Precios vigentes hasta el 31 de Mayo de 2026**")
 
-# Los precios base han subido un 20% y el drone se valorizó
 SERVICIOS = {
-    "Evento 15/18 años": {
-        "base": 320000, 
-        "con_drone": 400000, 
-        "desc": "6hs de cobertura, +100 fotos editadas y video hd."
-    },
-    "Boda Completa": {
-        "base": 400000, 
-        "con_drone": 470000, 
-        "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."
-    },
-    "Bautismo (Iglesia + Fiesta)": {
-        "base": 280000, 
-        "con_drone": 365000, 
-        "desc": "Cobertura completa, +100 fotos y 1 video."
-    },
-    "Video Musical 4K": {
-        "base": 360000, 
-        "con_drone": 445000, 
-        "desc": "Producción y edición profesional."
-    },
-    "Sesión Retrato (2hs)": {
-        "base": 60000, 
-        "con_drone": 135000, 
-        "desc": "50-70 fotos digitales editadas."
-    },
-    "Evento (Solo Fotos)": {
-        "base": 215000, 
-        "con_drone": 300000, 
-        "desc": "Cobertura fotográfica completa."
-    }
+    "Evento 15/18 años": {"base": 320000, "con_drone": 400000, "desc": "6hs de cobertura, +100 fotos editadas y video hd."},
+    "Boda Completa": {"base": 400000, "con_drone": 470000, "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."},
+    "Bautismo (Iglesia + Fiesta)": {"base": 280000, "con_drone": 365000, "desc": "Cobertura completa, +100 fotos y 1 video."},
+    "Video Musical 4K": {"base": 360000, "con_drone": 445000, "desc": "Producción y edición profesional."},
+    "Sesión Retrato (2hs)": {"base": 60000, "con_drone": 135000, "desc": "50-70 fotos digitales editadas."},
+    "Evento (Solo Fotos)": {"base": 215000, "con_drone": 300000, "desc": "Cobertura fotográfica completa."}
 }
 
 DEPARTAMENTOS = {
@@ -127,7 +119,6 @@ with c2:
     lugar_evento = st.selectbox("¿Departamento?", list(DEPARTAMENTOS.keys()))
 
 datos = SERVICIOS[servicio_nom]
-# El costo por KM se ajustó ligeramente a $1200 por logística
 total_final = (datos["con_drone"] if con_drone else datos["base"]) + (DEPARTAMENTOS[lugar_evento] * 1200)
 
 st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
@@ -139,5 +130,17 @@ texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' en {lugar_evento}. Tot
 st.link_button("📱 Consultar disponibilidad por WhatsApp", 
                f"https://wa.me/{mi_numero}?text={urllib.parse.quote(texto_mensaje)}", 
                use_container_width=True)
+
+# --- 8. CALENDARIO DE DISPONIBILIDAD ---
+st.divider()
+st.subheader("📅 Consultá fechas disponibles")
+# Reemplaza 'TU_EMAIL' por tu dirección de Gmail de trabajo
+google_calendar_url = "https://calendar.google.com/calendar/embed?src=TU_EMAIL@gmail.com&ctz=America/Argentina/Buenos_Aires&wkst=1&bgcolor=%230b0d10&showTitle=0&showNav=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
+
+st.markdown(f"""
+    <div class="calendar-container">
+        <iframe src="{google_calendar_url}" style="border-width:0" frameborder="0" scrolling="no"></iframe>
+    </div>
+""", unsafe_allow_html=True)
 
 st.markdown("<br><hr><center>© 2026 DL Fotografía y Video | Albardón, San Juan</center>", unsafe_allow_html=True)
