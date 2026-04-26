@@ -42,7 +42,6 @@ st.markdown("""
         height: auto;
     }
     
-    /* Estilo para el contenedor del calendario */
     .calendar-container {
         position: relative;
         padding-bottom: 75%;
@@ -50,6 +49,7 @@ st.markdown("""
         overflow: hidden;
         border-radius: 10px;
         border: 1px solid #333;
+        margin-bottom: 2rem;
     }
     .calendar-container iframe {
         position: absolute;
@@ -84,17 +84,29 @@ with col_info:
     Mi enfoque combina la espontaneidad con la más alta calidad técnica, 
     utilizando equipos profesionales y tomas aéreas 4K para un resultado cinematográfico.
     """)
-    st.success("✅ **Entrega Digital:** Todos los trabajos se entregan mediante una galería privada en **Google Drive** para descarga inmediata en alta calidad.")
+    st.success("✅ **Entrega Digital:** Todos los trabajos se entregan mediante una galería privada en **Google Drive** para descarga inmediata.")
 
 with col_extra:
     if os.path.exists("foto3.jpg"):
         st.image("foto3.jpg", caption="Post-producción profesional", use_container_width=True)
 
-# --- 6. CALCULADORA DE PRECIOS ACTUALIZADA ---
+# --- 6. COTIZADOR Y CALENDARIO ---
 st.divider()
 st.title("📊 Cotizá tu evento")
 st.warning("⚠️ **Precios vigentes hasta el 31 de Mayo de 2026**")
 
+# EL CALENDARIO AHORA APARECE AQUÍ
+st.subheader("📅 Consultá mi disponibilidad")
+# Reemplaza 'TU_EMAIL' por tu dirección de Gmail
+google_calendar_url = "https://calendar.google.com/calendar/embed?src=TU_EMAIL@gmail.com&ctz=America/Argentina/Buenos_Aires&wkst=1&bgcolor=%230b0d10&showTitle=0&showNav=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
+
+st.markdown(f"""
+    <div class="calendar-container">
+        <iframe src="{google_calendar_url}" style="border-width:0" frameborder="0" scrolling="no"></iframe>
+    </div>
+""", unsafe_allow_html=True)
+
+# --- 7. CALCULADORA DE PRECIOS ---
 SERVICIOS = {
     "Evento 15/18 años": {"base": 320000, "con_drone": 400000, "desc": "6hs de cobertura, +100 fotos editadas y video hd."},
     "Boda Completa": {"base": 400000, "con_drone": 470000, "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."},
@@ -122,25 +134,13 @@ datos = SERVICIOS[servicio_nom]
 total_final = (datos["con_drone"] if con_drone else datos["base"]) + (DEPARTAMENTOS[lugar_evento] * 1200)
 
 st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
-st.info(f"📝 **Incluye:** {datos['desc']} | ☁️ **Entrega vía Google Drive**.")
+st.info(f"📝 **Incluye:** {datos['desc']}")
 
-# --- 7. BOTÓN DE WHATSAPP ---
+# --- 8. BOTÓN DE WHATSAPP ---
 mi_numero = "5492645164757"
-texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' en {lugar_evento}. Total: ${total_final:,.0f}. Entrega en Drive."
-st.link_button("📱 Consultar disponibilidad por WhatsApp", 
+texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' en {lugar_evento}. Total: ${total_final:,.0f}."
+st.link_button("📱 Consultar por WhatsApp", 
                f"https://wa.me/{mi_numero}?text={urllib.parse.quote(texto_mensaje)}", 
                use_container_width=True)
-
-# --- 8. CALENDARIO DE DISPONIBILIDAD ---
-st.divider()
-st.subheader("📅 Consultá fechas disponibles")
-# Reemplaza 'TU_EMAIL' por tu dirección de Gmail de trabajo
-google_calendar_url = "https://calendar.google.com/calendar/embed?src=TU_EMAIL@gmail.com&ctz=America/Argentina/Buenos_Aires&wkst=1&bgcolor=%230b0d10&showTitle=0&showNav=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
-
-st.markdown(f"""
-    <div class="calendar-container">
-        <iframe src="{google_calendar_url}" style="border-width:0" frameborder="0" scrolling="no"></iframe>
-    </div>
-""", unsafe_allow_html=True)
 
 st.markdown("<br><hr><center>© 2026 DL Fotografía y Video | Albardón, San Juan</center>", unsafe_allow_html=True)
