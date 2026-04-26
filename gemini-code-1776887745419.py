@@ -81,12 +81,12 @@ st.warning("⚠️ **Precios vigentes hasta el 31 de Mayo de 2026**")
 # Los precios base han subido un 20% y el drone se valorizó
 SERVICIOS = {
     "Evento 15/18 años": {
-        "base": 280000, 
+        "base": 320000, 
         "con_drone": 365000, 
-        "desc": "6hs de cobertura, +100 fotos editadas y video resumen."
+        "desc": "6hs de cobertura, +100 fotos editadas y video hd."
     },
     "Boda Completa": {
-        "base": 385000, 
+        "base": 400000, 
         "con_drone": 470000, 
         "desc": "Civil, Iglesia y Fiesta. +200 fotos y 2 videos."
     },
@@ -101,7 +101,7 @@ SERVICIOS = {
         "desc": "Producción y edición profesional."
     },
     "Sesión Retrato (2hs)": {
-        "base": 50000, 
+        "base": 60000, 
         "con_drone": 135000, 
         "desc": "50-70 fotos digitales editadas."
     },
