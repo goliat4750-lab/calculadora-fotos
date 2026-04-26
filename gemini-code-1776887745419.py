@@ -42,7 +42,6 @@ st.markdown("""
         height: auto;
     }
 
-    /* Estilo para que el calendario se vea bien en móviles */
     .calendar-container {
         position: relative;
         padding-bottom: 75%;
@@ -85,7 +84,7 @@ with col_info:
     Mi enfoque combina la espontaneidad con la más alta calidad técnica, 
     utilizando equipos profesionales y tomas aéreas 4K para un resultado cinematográfico.
     """)
-    st.success("✅ **Entrega Digital:** Todos los trabajos se entregan mediante una galería privada en **Google Drive** para descarga inmediata.")
+    st.success("✅ **Entrega Digital:** Todos los trabajos se entreggan mediante una galería privada en **Google Drive** para descarga inmediata.")
 
 with col_extra:
     if os.path.exists("foto3.jpg"):
@@ -96,7 +95,7 @@ st.divider()
 st.title("📊 Cotizá tu evento")
 st.warning("⚠️ **Precios vigentes hasta el 31 de Mayo de 2026**")
 
-# Calendario ubicado justo después del título
+# Calendario corregido con tu cuenta goliat4750@gmail.com
 st.subheader("📅 Consultá mi disponibilidad")
 google_calendar_url = "https://calendar.google.com/calendar/embed?src=goliat4750@gmail.com&ctz=America/Argentina/Buenos_Aires&wkst=1&bgcolor=%230b0d10&showTitle=0&showNav=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
 
@@ -134,7 +133,7 @@ datos = SERVICIOS[servicio_nom]
 total_final = (datos["con_drone"] if con_drone else datos["base"]) + (DEPARTAMENTOS[lugar_evento] * 1200)
 
 st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
-st.info(f"📝 **Incluye:** {datos['desc']}")
+st.info(f"📝 **Incluye:** {datos['desc']} | ☁️ **Entrega vía Google Drive**.")
 
 # --- 8. BOTÓN DE WHATSAPP ---
 mi_numero = "5492645164757"
