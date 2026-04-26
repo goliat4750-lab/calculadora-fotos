@@ -41,7 +41,8 @@ st.markdown("""
         width: 80%; 
         height: auto;
     }
-    
+
+    /* Estilo para que el calendario se vea bien en móviles */
     .calendar-container {
         position: relative;
         padding-bottom: 75%;
@@ -95,10 +96,9 @@ st.divider()
 st.title("📊 Cotizá tu evento")
 st.warning("⚠️ **Precios vigentes hasta el 31 de Mayo de 2026**")
 
-# EL CALENDARIO AHORA APARECE AQUÍ
+# Calendario ubicado justo después del título
 st.subheader("📅 Consultá mi disponibilidad")
-# Reemplaza 'TU_EMAIL' por tu dirección de Gmail
-google_calendar_url = "https://calendar.google.com/calendar/embed?src=TU_EMAIL@gmail.com&ctz=America/Argentina/Buenos_Aires&wkst=1&bgcolor=%230b0d10&showTitle=0&showNav=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
+google_calendar_url = "https://calendar.google.com/calendar/embed?src=goliat4750@gmail.com&ctz=America/Argentina/Buenos_Aires&wkst=1&bgcolor=%230b0d10&showTitle=0&showNav=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
 
 st.markdown(f"""
     <div class="calendar-container">
