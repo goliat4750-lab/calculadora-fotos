@@ -122,7 +122,7 @@ DEPARTAMENTOS = {
 c1, c2 = st.columns(2)
 with c1:
     servicio_nom = st.selectbox("¿Qué servicio buscás?", list(SERVICIOS.keys()))
-    con_drone = st.checkbox("¿Incluir tomas aéreas 4K? (Drone Potensic)")
+    con_drone = st.checkbox("¿Incluir tomas aéreas 4K?)
 with c2:
     lugar_evento = st.selectbox("¿Departamento?", list(DEPARTAMENTOS.keys()))
 
