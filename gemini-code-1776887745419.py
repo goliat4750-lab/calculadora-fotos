@@ -114,7 +114,8 @@ SERVICIOS = {
     "Sesión Retrato (2hs)": {"base": 60000, "con_drone": 135000, "desc": "50-70 fotos digitales editadas."},
     "Evento (Solo Fotos)": {"base": 215000, "con_drone": 300000, "desc": "Cobertura fotográfica completa."},
     "Cumpleaños Infantil": {"base": 220000, "con_drone": 290000, "desc": "3hs de cobertura, fotos ilimitadas y clip de video resumen."},
-}
+    "baby shower": {"base": 200000, "con_drone": 280000, "desc": "3hs de cobertura, fotos ilimitadas y clip de video resumen."},
+    }
 
 DEPARTAMENTOS = {
     "Albardón": 0, "Capital": 15, "Chimbas": 8, "Santa Lucía": 18, "Rivadavia": 20,
