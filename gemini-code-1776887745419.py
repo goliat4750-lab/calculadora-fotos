@@ -112,7 +112,8 @@ SERVICIOS = {
     "Bautismo (Iglesia + Fiesta)": {"base": 280000, "con_drone": 365000, "desc": "Cobertura completa, +100 fotos y 1 video."},
     "Video Musical 4K": {"base": 360000, "con_drone": 445000, "desc": "Producción y edición profesional."},
     "Sesión Retrato (2hs)": {"base": 60000, "con_drone": 135000, "desc": "50-70 fotos digitales editadas."},
-    "Evento (Solo Fotos)": {"base": 215000, "con_drone": 300000, "desc": "Cobertura fotográfica completa."}
+    "Evento (Solo Fotos)": {"base": 215000, "con_drone": 300000, "desc": "Cobertura fotográfica completa."},
+    "Cumpleaños Infantil": {"base": 180000, "con_drone": 250000, "desc": "3hs de cobertura, fotos ilimitadas y clip de video resumen."},
 }
 
 DEPARTAMENTOS = {
