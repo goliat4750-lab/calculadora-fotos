@@ -7,7 +7,7 @@ import base64
 # --- 1. CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(
     page_title="DL Fotografía y Video", 
-    page_icon="logo.png",
+    page_icon="logo2.png",
     layout="wide"
 )
 
@@ -62,11 +62,11 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- 3. ENCABEZADO CON LOGO ---
-logo_path = "logo.png"
-if os.path.exists(logo_path):
-    with open(logo_path, "rb") as f:
+logo_path = "logo2.png"
+if os.path.exists(logo2_path):
+    with open(logo2_path, "rb") as f:
         data = base64.b64encode(f.read()).decode()
-    st.markdown(f'<div class="centrar-todo"><img src="data:image/png;base64,{data}" class="logo-img"></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="centrar-todo"><img src="data:image/png;base64,{data}" class="logo2-img"></div>', unsafe_allow_html=True)
 else:
     st.markdown("<h2 style='text-align: center;'>DL FOTOGRAFÍA Y VIDEO</h2>", unsafe_allow_html=True)
 
