@@ -82,7 +82,7 @@ with col_info:
     st.write("""
     Especialista en narrativa visual para bodas, 15 años y eventos sociales en San Juan. 
     Mi enfoque combina la espontaneidad con la más alta calidad técnica, 
-    utilizando equipos profesionales y tomas aéreas 4K para un resultado cinematográfico.
+    utilizando equipos profesionales y tomas con drone 4K para un resultado cinematográfico.
     """)
     st.success("✅ **Entrega Digital:** Todos los trabajos se entreggan mediante una galería privada en **Google Drive** para descarga inmediata.")
 
