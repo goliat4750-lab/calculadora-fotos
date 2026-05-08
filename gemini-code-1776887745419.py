@@ -71,8 +71,8 @@ else:
     st.markdown("<h2 style='text-align: center;'>DL FOTOGRAFÍA Y VIDEO</h2>", unsafe_allow_html=True)
 
 # --- 4. VIDEO DE BIENVENIDA ---
-if os.path.exists("teatro.mp4"):
-    st.video("teatro.mp4", loop=True, autoplay=True, muted=True)
+if os.path.exists("bodadrone.mp4"):
+    st.video("bodadrone.mp4", loop=True, autoplay=True, muted=True)
 
 # --- 5. SECCIÓN: SOBRE MÍ ---
 st.divider()
