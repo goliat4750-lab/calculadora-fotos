@@ -11,9 +11,13 @@ st.set_page_config(
     layout="wide"
 )
 
-# --- 2. ESTILOS CSS ---
+# --- 2. ESTILOS CSS AVANZADOS (CINEMATIC DARK) ---
 st.markdown("""
     <style>
+    /* Importar fuentes de Google */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Oswald:wght@400;500;700&display=swap');
+
+    /* Ocultar elementos por defecto de Streamlit */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
@@ -25,7 +29,20 @@ st.markdown("""
         margin-top: -1rem !important;
     }
     
-    .stApp { background-color: #0b0d10; color: white; }
+    /* Fondo y fuente global */
+    .stApp { 
+        background-color: #0b0d10; 
+        color: #e0e0e0; 
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Estilo de todos los títulos */
+    h1, h2, h3 {
+        font-family: 'Oswald', sans-serif !important;
+        color: #E5A93C !important; /* Dorado cinematográfico */
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
     
     .centrar-todo {
         display: flex;
@@ -40,15 +57,18 @@ st.markdown("""
         max-width: 280px;
         width: 80%; 
         height: auto;
+        filter: drop-shadow(0px 0px 10px rgba(229, 169, 60, 0.3)); /* Resplandor dorado en el logo */
     }
 
+    /* Contenedor del calendario */
     .calendar-container {
         position: relative;
         padding-bottom: 75%;
         height: 0;
         overflow: hidden;
-        border-radius: 10px;
-        border: 1px solid #333;
+        border-radius: 12px;
+        border: 2px solid #E5A93C; /* Borde dorado */
+        box-shadow: 0 4px 20px rgba(229, 169, 60, 0.15);
         margin-bottom: 2rem;
     }
     .calendar-container iframe {
@@ -57,6 +77,52 @@ st.markdown("""
         left: 0;
         width: 100%;
         height: 100%;
+    }
+
+    /* Estilo para la tarjeta de precio final (Metric) */
+    [data-testid="stMetric"] {
+        background-color: #15191f;
+        border: 1px solid #E5A93C;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(229, 169, 60, 0.2);
+        text-align: center;
+    }
+    [data-testid="stMetricValue"] {
+        color: #E5A93C !important;
+        font-family: 'Oswald', sans-serif;
+        font-size: 3rem !important;
+    }
+    
+    /* Alertas y avisos más estéticos */
+    div[data-testid="stAlert"] {
+        background-color: #15191f;
+        color: #e0e0e0;
+        border: none;
+        border-left: 5px solid #E5A93C;
+        border-radius: 4px;
+    }
+
+    /* Botón de WhatsApp Personalizado */
+    .btn-whatsapp {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(45deg, #25D366, #128C7E);
+        color: white !important;
+        padding: 18px 20px;
+        text-decoration: none;
+        border-radius: 10px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        font-size: 18px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        margin-top: 10px;
+    }
+    .btn-whatsapp:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -68,7 +134,7 @@ if os.path.exists(logo_path):
         data = base64.b64encode(f.read()).decode()
     st.markdown(f'<div class="centrar-todo"><img src="data:image/png;base64,{data}" class="logo-img"></div>', unsafe_allow_html=True)
 else:
-    st.markdown("<h2 style='text-align: center;'>DL FOTOGRAFÍA Y VIDEO</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #E5A93C;'>DL FOTOGRAFÍA Y VIDEO</h2>", unsafe_allow_html=True)
 
 # --- 4. VIDEO DE BIENVENIDA ---
 if os.path.exists("bodadrone.mp4"):
@@ -84,7 +150,7 @@ with col_info:
     Mi enfoque combina la espontaneidad con la más alta calidad técnica, 
     utilizando equipos profesionales y tomas con drone 4K para un resultado cinematográfico.
     """)
-    st.success("✅ **Entrega Digital:** Todos los trabajos se entreggan mediante una galería privada en **Google Drive** para descarga inmediata.")
+    st.success("✅ **Entrega Digital:** Todos los trabajos se entregan mediante una galería privada en **Google Drive** para descarga inmediata.")
 
 with col_extra:
     if os.path.exists("foto3.jpg"):
@@ -95,7 +161,6 @@ st.divider()
 st.title("📊 Cotizá tu evento")
 st.warning("⚠️ **Precios vigentes hasta el 31 de Mayo de 2026**")
 
-# Calendario corregido con tu cuenta goliat4750@gmail.com
 st.subheader("📅 Consultá mi disponibilidad")
 google_calendar_url = "https://calendar.google.com/calendar/embed?src=goliat4750@gmail.com&ctz=America/Argentina/Buenos_Aires&wkst=1&bgcolor=%230b0d10&showTitle=0&showNav=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
 
@@ -114,8 +179,8 @@ SERVICIOS = {
     "Sesión Retrato (2hs)": {"base": 60000, "con_drone": 135000, "desc": "50-70 fotos digitales editadas."},
     "Evento (Solo Fotos)": {"base": 215000, "con_drone": 300000, "desc": "Cobertura fotográfica completa."},
     "Cumpleaños Infantil": {"base": 220000, "con_drone": 290000, "desc": "3hs de cobertura, fotos ilimitadas y clip de video resumen."},
-    "baby shower": {"base": 200000, "con_drone": 280000, "desc": "3hs de cobertura, fotos ilimitadas y clip de video resumen."},
-    }
+    "Baby Shower": {"base": 200000, "con_drone": 280000, "desc": "3hs de cobertura, fotos ilimitadas y clip de video resumen."},
+}
 
 DEPARTAMENTOS = {
     "Albardón": 0, "Capital": 15, "Chimbas": 8, "Santa Lucía": 18, "Rivadavia": 20,
@@ -134,14 +199,22 @@ with c2:
 datos = SERVICIOS[servicio_nom]
 total_final = (datos["con_drone"] if con_drone else datos["base"]) + (DEPARTAMENTOS[lugar_evento] * 1200)
 
+st.write("<br>", unsafe_allow_html=True) # Espacio extra
+
+# Métrica de Streamlit (se estilará automáticamente con el CSS de arriba)
 st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
 st.info(f"📝 **Incluye:** {datos['desc']} | ☁️ **Entrega vía Google Drive**.")
 
-# --- 8. BOTÓN DE WHATSAPP ---
+# --- 8. BOTÓN DE WHATSAPP (Avanzado) ---
 mi_numero = "5492645164757"
-texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' en {lugar_evento}. Total: ${total_final:,.0f}."
-st.link_button("📱 Consultar por WhatsApp", 
-               f"https://wa.me/{mi_numero}?text={urllib.parse.quote(texto_mensaje)}", 
-               use_container_width=True)
+texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' en {lugar_evento}. Total estimado: ${total_final:,.0f}. Me gustaría saber más."
+link_wa = f"https://wa.me/{mi_numero}?text={urllib.parse.quote(texto_mensaje)}"
 
-st.markdown("<br><hr><center>© 2026 DL Fotografía y Video | Albardón, San Juan</center>", unsafe_allow_html=True)
+# Usamos HTML para inyectar el botón con nuestro estilo CSS
+st.markdown(f"""
+    <a href="{link_wa}" target="_blank" class="btn-whatsapp">
+        📱 Enviar presupuesto por WhatsApp
+    </a>
+""", unsafe_allow_html=True)
+
+st.markdown("<br><hr><center style='color: #666; font-size: 14px;'>© 2026 DL Fotografía y Video | Albardón, San Juan</center>", unsafe_allow_html=True)
