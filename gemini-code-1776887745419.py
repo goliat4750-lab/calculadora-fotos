@@ -212,7 +212,7 @@ link_wa = f"https://wa.me/{mi_numero}?text={urllib.parse.quote(texto_mensaje)}"
 # Usamos HTML para inyectar el botón con nuestro estilo CSS
 st.markdown(f"""
     <a href="{link_wa}" target="_blank" class="btn-whatsapp">
-        📱 Enviar presupuesto por WhatsApp
+        📱 Enviar presupuesto por WhatsApp a DIEGO
     </a>
 """, unsafe_allow_html=True)
 
