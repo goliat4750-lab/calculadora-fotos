@@ -243,7 +243,7 @@ with pay_col1:
     st.markdown("""
         <div class="pago-card">
             <h4>💵 Efectivo / Transferencia</h4>
-            <p style="font-size: 14px; color: #b0b0b0;">Aboná de forma directa de manera rápida. Consultá por descuentos especiales en pagos en efectivo.</p>
+            <p style="font-size: 14px; color: #b0b0b0;">Aboná de forma directa de manera rápida.</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -251,7 +251,7 @@ with pay_col2:
     st.markdown("""
         <div class="pago-card">
             <h4>🍊 Tarjeta Naranja X</h4>
-            <p style="font-size: 14px; color: #b0b0b0;">Financiá la cobertura de tu evento con Naranja X. Consultá por las promociones vigentes y cuotas.</p>
+            <p style="font-size: 14px; color: #b0b0b0;">Financiá la cobertura de tu evento con Naranja X.</p>
         </div>
     """, unsafe_allow_html=True)
 
