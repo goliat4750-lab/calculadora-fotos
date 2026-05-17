@@ -94,13 +94,25 @@ st.markdown("""
         font-size: 3rem !important;
     }
     
-    /* Alertas y avisos más estéticos */
+    /* Alertas y avisos más estéticos (st.warning) */
     div[data-testid="stAlert"] {
         background-color: #15191f;
         color: #e0e0e0;
         border: none;
         border-left: 5px solid #E5A93C;
         border-radius: 4px;
+    }
+
+    /* Modificación del st.info para los detalles de la sesión */
+    div[data-testid="stNotification"] {
+        background-color: #15191f !important;
+        border: none !important;
+        border-left: 5px solid #E5A93C !important;
+        border-radius: 4px !important;
+    }
+    div[data-testid="stNotification"] p {
+        font-size: 18px !important; /* Texto más grande */
+        color: #e0e0e0 !important; /* Color gris claro/blanco para quitar el azul */
     }
 
     /* Botón de WhatsApp Personalizado */
@@ -159,6 +171,7 @@ with col_extra:
 # --- 6. COTIZADOR Y CALENDARIO ---
 st.divider()
 st.title("📊 Cotizá tu evento")
+st.warning("⚠️ **Precios vigentes hasta el 31 de Mayo de 2026**")
 
 st.subheader("📅 Consultá mi disponibilidad")
 google_calendar_url = "https://calendar.google.com/calendar/embed?src=goliat4750@gmail.com&ctz=America/Argentina/Buenos_Aires&wkst=1&bgcolor=%230b0d10&showTitle=0&showNav=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
@@ -212,7 +225,7 @@ link_wa = f"https://wa.me/{mi_numero}?text={urllib.parse.quote(texto_mensaje)}"
 # Usamos HTML para inyectar el botón con nuestro estilo CSS
 st.markdown(f"""
     <a href="{link_wa}" target="_blank" class="btn-whatsapp">
-        📱 Enviar presupuesto por WhatsApp a DIEGO
+        📱 Enviar presupuesto por WhatsApp
     </a>
 """, unsafe_allow_html=True)
 
