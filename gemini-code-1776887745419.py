@@ -187,7 +187,6 @@ with col_extra:
 # --- 6. COTIZADOR Y CALENDARIO ---
 st.divider()
 st.title("📊 Cotizá tu evento")
-st.warning("⚠️ **Precios vigentes hasta el 31 de Mayo de 2026**")
 
 st.subheader("📅 Consultá mi disponibilidad")
 google_calendar_url = "https://calendar.google.com/calendar/embed?src=goliat4750@gmail.com&ctz=America/Argentina/Buenos_Aires&wkst=1&bgcolor=%230b0d10&showTitle=0&showNav=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
