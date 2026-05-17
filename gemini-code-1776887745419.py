@@ -115,6 +115,22 @@ st.markdown("""
         color: #e0e0e0 !important; /* Color gris claro/blanco para quitar el azul */
     }
 
+    /* Tarjetas personalizadas para formas de pago */
+    .pago-card {
+        background-color: #15191f;
+        border: 1px solid #2a313d;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        height: 100%;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .pago-card h4 {
+        color: #E5A93C;
+        font-family: 'Oswald', sans-serif;
+        margin-bottom: 10px;
+    }
+
     /* Botón de WhatsApp Personalizado */
     .btn-whatsapp {
         display: flex;
@@ -130,7 +146,7 @@ st.markdown("""
         font-size: 18px;
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-        margin-top: 10px;
+        margin-top: 20px;
     }
     .btn-whatsapp:hover {
         transform: translateY(-3px);
@@ -213,13 +229,44 @@ total_final = (datos["con_drone"] if con_drone else datos["base"]) + (DEPARTAMEN
 
 st.write("<br>", unsafe_allow_html=True) # Espacio extra
 
-# Métrica de Streamlit (se estilará automáticamente con el CSS de arriba)
+# Métrica de Streamlit
 st.metric(label="Presupuesto Estimado", value=f"${total_final:,.0f}")
 st.info(f"📝 **Incluye:** {datos['desc']} | ☁️ **Entrega vía Google Drive**.")
 
+# --- NUEVA SECCIÓN: FORMAS DE PAGO ---
+st.write("<br>", unsafe_allow_html=True)
+st.subheader("💳 Formas de Pago y Reserva")
+
+pay_col1, pay_col2, pay_col3 = st.columns(3)
+
+with pay_col1:
+    st.markdown("""
+        <div class="pago-card">
+            <h4>💵 Efectivo / Transferencia</h4>
+            <p style="font-size: 14px; color: #b0b0b0;">Aboná de forma directa de manera rápida. Consultá por descuentos especiales en pagos en efectivo.</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+with pay_col2:
+    st.markdown("""
+        <div class="pago-card">
+            <h4>🍊 Tarjeta Naranja X</h4>
+            <p style="font-size: 14px; color: #b0b0b0;">Financiá la cobertura de tu evento con Naranja X. Consultá por las promociones vigentes y cuotas.</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+with pay_col3:
+    st.markdown("""
+        <div class="pago-card">
+            <h4>📅 Congelá la Fecha</h4>
+            <p style="font-size: 14px; color: #b0b0b0;">Asegurá tu día reservando con una seña del 50%. El saldo restante se cancela el día del evento.</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+
 # --- 8. BOTÓN DE WHATSAPP (Avanzado) ---
 mi_numero = "5492645164757"
-texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' en {lugar_evento}. Total estimado: ${total_final:,.0f}. Me gustaría saber más."
+texto_mensaje = f"Hola Diego! Coticé un '{servicio_nom}' en {lugar_evento}. Total estimado: ${total_final:,.0f}. Me gustaría coordinar los detalles y consultar por el pago con Naranja X."
 link_wa = f"https://wa.me/{mi_numero}?text={urllib.parse.quote(texto_mensaje)}"
 
 # Usamos HTML para inyectar el botón con nuestro estilo CSS
